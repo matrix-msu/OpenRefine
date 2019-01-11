@@ -55,6 +55,7 @@ public class QuickStatementsExporter implements WriterExporter {
 
     public static final String impossibleSchedulingErrorMessage = "This edit batch cannot be performed with QuickStatements due to the structure of its new items.";
     public static final String noSchemaErrorMessage = "No schema was provided. You need to align your project with Wikidata first.";
+    public static int numCreated = 0;
 
     public QuickStatementsExporter() {
     }
@@ -67,6 +68,7 @@ public class QuickStatementsExporter implements WriterExporter {
     @Override
     public void export(Project project, Properties options, Engine engine, Writer writer)
             throws IOException {
+    QuickStatementsExporter.numCreated = 0;
         WikibaseSchema schema = (WikibaseSchema) project.overlayModels.get("wikibaseSchema");
         if (schema == null) {
             writer.write(noSchemaErrorMessage);
@@ -125,7 +127,8 @@ public class QuickStatementsExporter implements WriterExporter {
             throws IOException {
         String qid = item.getItemId().getId();
         if (item.isNew()) {
-            writer.write("CREATE\n");
+            int num = ++QuickStatementsExporter.numCreated;
+            writer.write("CREATE-"+num+"\n");
             qid = "LAST";
             item = item.normalizeLabelsAndAliases();
         }
@@ -135,6 +138,17 @@ public class QuickStatementsExporter implements WriterExporter {
         translateNameDescr(qid, item.getAliases(), "A", item.getItemId(), writer);
 
         for (Statement s : item.getAddedStatements()) {
+            if( s.getClaim().getMainSnak().getPropertyId().getId() == "P48"){
+                System.out.println("is spouse export");
+                System.out.println(s);
+                System.out.println(s.getClaim());
+                System.out.println(s.getClaim().getValue());
+            }
+        System.out.println("export line");
+        // System.out.println(s.getClaim().getMainSnak().getPropertyId().getId());
+        // System.out.println(s.getClaim());
+        // System.out.println(s.getClaim().getValue());
+         System.out.println(s);
             translateStatement(qid, s, s.getClaim().getMainSnak().getPropertyId().getId(), true, writer);
         }
         for (Statement s : item.getDeletedStatements()) {
@@ -152,6 +166,17 @@ public class QuickStatementsExporter implements WriterExporter {
         if (targetValue != null) {
             if (!add) {
                 writer.write("- ");
+            }
+            System.out.println("target value:");
+            System.out.println(targetValue);
+            if ( targetValue.trim().equals("\"FN000189\"")){
+                targetValue = "Q576";
+            }else if ( targetValue.trim().equals("\"FN000192\"")){
+                targetValue = "Q579";
+            }else if ( targetValue.trim().equals("\"FN000601\"")){
+                targetValue = "CREATED-11";
+            }else if ( targetValue.trim().equals("\"FN000600\"")){
+                targetValue = "CREATED-10";
             }
             writer.write(qid + "\t" + pid + "\t" + targetValue);
             for (SnakGroup q : claim.getQualifiers()) {

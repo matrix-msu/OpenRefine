@@ -56,7 +56,7 @@ public class EntityCache {
                         if (doc != null) {
                             return doc;
                         } else {
-                            throw new MediaWikiApiErrorException("400", "Unknown entity id \"" + entityId + "\"");
+                            throw new MediaWikiApiErrorException("400", "Unknown entity id \"" + entityId + "\" yay");
                         }
                     }
                 });

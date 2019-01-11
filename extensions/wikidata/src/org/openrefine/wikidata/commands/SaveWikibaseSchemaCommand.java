@@ -58,7 +58,13 @@ public class SaveWikibaseSchemaCommand extends Command {
             }
 
             JSONObject json = ParsingUtilities.evaluateJsonStringToObject(jsonString);
+
             WikibaseSchema schema = WikibaseSchema.reconstruct(json);
+
+System.out.println("after mapper");
+System.out.println(schema.toString());
+
+//respondError(response, "bebug yay");
 
             AbstractOperation op = new SaveWikibaseSchemaOperation(schema);
             Process process = op.createProcess(project, new Properties());

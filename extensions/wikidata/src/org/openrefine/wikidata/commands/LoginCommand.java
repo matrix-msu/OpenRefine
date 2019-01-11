@@ -60,6 +60,8 @@ public class LoginCommand extends Command {
             writer.object();
             writer.key("logged_in");
             writer.value(manager.isLoggedIn());
+			writer.key("testing");
+            writer.value("success");
             writer.key("username");
             writer.value(manager.getUsername());
             writer.endObject();

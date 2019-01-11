@@ -28,18 +28,21 @@ WIKIDATA_LANGUAGES = [ "aa", "ab", "ace", "ady", "ady-cyrl", "aeb", "aeb-arab", 
 
 $.suggest("langsuggest", {
   _init: function() {
-    this.api_url = "https://www.wikidata.org/w/api.php";
+    this.api_url = "https://sandro-16.matrix.msu.edu/w/api.php";
     this._status.SELECT = "Select a language from the list:";
   },
 
   request: function(val, cursor) {
     var self = this;
     var ajax_options = {
+      // url: "https://www.wikidata.org/w/api.php",
       url: self.api_url,
       data: {   action: "languagesearch",
                 search: val,
                 format: "json", },
       success: function(data) {
+        console.log("language search", data)
+          data = {languagesearch: {en: "english" }};
          self.response(self.convertResults(data));
       },
       dataType: "jsonp",

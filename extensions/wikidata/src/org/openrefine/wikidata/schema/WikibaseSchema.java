@@ -65,7 +65,9 @@ public class WikibaseSchema implements OverlayModel {
 
     protected List<WbItemDocumentExpr> itemDocumentExprs = new ArrayList<WbItemDocumentExpr>();
 
-    protected String baseIri = "http://www.wikidata.org/entity/";
+    //protected String baseIri = "http://www.wikidata.org/entity/";http://172.20.48.56/wiki/index.php/Entity
+    //protected String baseIri = "http://172.20.48.56/wiki/entity/";
+    protected String baseIri = "https://sandro-16.matrix.msu.edu/wiki/Special:EntityData/";
 
     /**
      * Constructor.
@@ -187,14 +189,22 @@ public class WikibaseSchema implements OverlayModel {
     }    
     
     static public WikibaseSchema reconstruct(String json) throws JSONException {
+        //return "hello";
+    System.out.println("in reconst");
         ObjectMapper mapper = new ObjectMapper();
+    System.out.println("in reconst2");
+    System.out.println(WikibaseSchema.class);
         try {
             return mapper.readValue(json, WikibaseSchema.class);
         } catch (JsonParseException e) {
+        System.out.println("in reconst4");
             throw new JSONException(e.toString());
         } catch (JsonMappingException e) {
+        System.out.println("in reconst5");
+        System.out.println(e.toString());
             throw new JSONException(e.toString());
         } catch (IOException e) {
+        System.out.println("in reconst6");
             throw new JSONException(e.toString());
         }
     }

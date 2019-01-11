@@ -36,6 +36,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonSubTypes({ @Type(value = WbStringConstant.class, name = "wbstringconstant"),
         @Type(value = WbStringVariable.class, name = "wbstringvariable"),
+        @Type(value = WbStringVariable.class, name = "quickstatement-associator"),
         @Type(value = WbLocationConstant.class, name = "wblocationconstant"),
         @Type(value = WbLocationVariable.class, name = "wblocationvariable"),
         @Type(value = WbItemConstant.class, name = "wbitemconstant"),

@@ -128,7 +128,7 @@ SchemaAlignmentDialog.setUpTabs = function() {
         .addClass('disabled')
         .click(function() { SchemaAlignmentDialog._discardChanges(); });
 
-  this._wikibasePrefix = "http://www.wikidata.org/entity/"; // hardcoded for now
+  this._wikibasePrefix = "https://sandro-16.matrix.msu.edu/wiki/Special:EntityData/"; // hardcoded for now
 
   // Init the column area
   this.updateColumns();
@@ -154,7 +154,11 @@ SchemaAlignmentDialog.setUpTabs = function() {
   this._previewPanes = $(".schema-alignment-dialog-preview");
 
   // Load the existing schema
+    //console.log('before this reset')
+    //console.log(theProject);
+
   this._reset(theProject.overlayModels.wikibaseSchema);
+
   // Perform initial preview
   this.preview();
 }
@@ -165,9 +169,12 @@ SchemaAlignmentDialog.updateColumns = function() {
   this._columnArea.empty();
   for (var i = 0; i < columns.length; i++) {
      var column = columns[i];
-     var reconConfig = column.reconConfig;
-     var cell = SchemaAlignmentDialog._createDraggableColumn(column.name, 
-        reconConfig && reconConfig.identifierSpace === this._wikibasePrefix && column.reconStats);
+     var reconConfig = column.reconConfig;if( reconConfig && reconConfig.identifierSpace === "https://sandro-16.matrix.msu.edu/Special:EntityData/" ){
+         var cell = SchemaAlignmentDialog._createDraggableColumn(column.name,true);
+     }else {
+         var cell = SchemaAlignmentDialog._createDraggableColumn(column.name,
+             reconConfig && reconConfig.identifierSpace === this._wikibasePrefix && column.reconStats);
+     }
      this._columnArea.append(cell);
   }
 
@@ -233,6 +240,7 @@ SchemaAlignmentDialog._reset = function(schema) {
 
   if (this._schema && this._schema.itemDocuments) {
     for(var i = 0; i != this._schema.itemDocuments.length; i++) {
+        //console.log('before add item here1');
       this._addItem(this._schema.itemDocuments[i]);
     }
   }
@@ -245,6 +253,8 @@ SchemaAlignmentDialog._reset = function(schema) {
 SchemaAlignmentDialog._save = function(onDone) {
   var self = this;
   var schema = this.getJSON();
+  schema.wikibasePrefix = "https://sandro-16.matrix.msu.edu/wiki/Special:EntityData/";
+  console.log('save', schema)
 
   Refine.postProcess(
     "wikidata",
@@ -289,7 +299,9 @@ SchemaAlignmentDialog._createDraggableColumn = function(name, reconciled) {
   if (reconciled) {
     cell.addClass('wbs-reconciled-column');
   } else {
-    cell.addClass('wbs-unreconciled-column');
+      //Josh edit here
+    //cell.addClass('wbs-reconciled-column');
+     cell.addClass('wbs-unreconciled-column');
   }
   return cell;
 }
@@ -316,6 +328,8 @@ SchemaAlignmentDialog._makeDeleteButton = function (noText) {
 /**************/
 
 SchemaAlignmentDialog._addItem = function(json) {
+    //console.log('add item');
+    //console.log('json: ', json);
   var subject = null;
   var statementGroups = null;
   var nameDescs = null;
@@ -366,6 +380,7 @@ SchemaAlignmentDialog._addItem = function(json) {
         .attr('data-emptyplaceholder', $.i18n._('wikidata-schema')['empty-statements'])
         .appendTo(right);
   var statementToolbar = $('<div></div>').addClass('wbs-toolbar').appendTo(right);
+  //console.log('item added to statement input', item[0])
   var addStatementButton = $('<a></a>').addClass('wbs-add-statement-group')
         .click(function(e) {
      SchemaAlignmentDialog._addStatementGroup(item, null);
@@ -374,9 +389,11 @@ SchemaAlignmentDialog._addItem = function(json) {
 
   SchemaAlignmentDialog._plusButton(
          $.i18n._('wikidata-schema')["add-statement"], addStatementButton);
-   
+
+  //console.log('statementgroups', statementGroups);
   if (statementGroups) {
      for(var i = 0; i != statementGroups.length; i++) {
+         //console.log('before this add statment')
         SchemaAlignmentDialog._addStatementGroup(item, statementGroups[i]);
      }
   }
@@ -474,6 +491,8 @@ SchemaAlignmentDialog._addStatementGroup = function(item, json) {
 
   var container = item.find('.wbs-statement-group-container').first();
   var statementGroup = $('<div></div>').addClass('wbs-statement-group');
+  //console.log('add statement group. this is the one')
+
   var inputContainer = $('<div></div>').addClass('wbs-prop-input').appendTo(statementGroup);
   var right = $('<div></div>').addClass('wbs-right').appendTo(statementGroup);
   var statementContainer = $('<div></div>').addClass('wbs-statement-container').appendTo(right);
@@ -481,6 +500,9 @@ SchemaAlignmentDialog._addStatementGroup = function(item, json) {
   var toolbar = $('<div></div>').addClass('wbs-toolbar').appendTo(right);
   var addValueButton = $('<a></a>').addClass('wbs-add-statement').click(function(e) {
      var datatype = inputContainer.data("jsonValue").datatype;
+     //console.log('before this add statmetn')
+      //console.log(' before herererer')
+      //console.log('datatyp before e', datatype)
      SchemaAlignmentDialog._addStatement(statementContainer, datatype, null);
      e.preventDefault();
   }).appendTo(toolbar).hide();
@@ -497,6 +519,8 @@ SchemaAlignmentDialog._addStatementGroup = function(item, json) {
 
   if (statements) {
      for (var i = 0; i != statements.length; i++) {
+         //console.log('before this ad 42')
+         //console.log('datatype 42', property.datatype)
         SchemaAlignmentDialog._addStatement(statementContainer, property.datatype, statements[i]);
         addValueButton.show();
         removeButton.hide();
@@ -545,9 +569,46 @@ SchemaAlignmentDialog._addStatement = function(container, datatype, json) {
         e.preventDefault();
     }).appendTo(toolbar1);
 
+    //add association check button
+    var aCheckHtml = '&nbsp;&nbsp;Values are items being created in this import:<input data-modeBeforeCheckbox="'+datatype+'" type="checkbox">';
+    var associatorCheckbox = $('<div>'+aCheckHtml+'</div>').addClass('wbs-associatorCheckbox').appendTo(statement);
+    associatorCheckbox.find('input').click(function(e) {
+        //console.log('checkbox click', $(this));
+        ////console.log('associator checkbox', associatorCheckbox);
+        //e.preventDefault();
+
+        var input = inputContainer.closest('.wbs-statement').find('input').first();
+
+        if( inputContainer.closest('.wbs-statement').find('input[type=checkbox]').prop('checked') === true ){
+            // var input2 = $('<input></input>').appendTo(inputContainer).addClass("associator-input2").addClass('wbs-unvalidated-input');
+            //
+            //input.attr("placeholder", "drag identifier column");
+            //input.next().find('.wbs-remove').click();
+            input.remove();
+            // input2.attr("placeholder", "drag associator column");
+            // input.attr('data-placeholder',input.attr('placeholder'));
+            // input.attr('placeholder','drag identifier column');
+            // var statement = $('<div></div>').addClass('wbs-statement');
+            inputContainer.closest('.wbs-statement').find("input").hide();
+            var inputContainer2 = $('<div></div>').addClass('wbs-target-input').addClass("associator-input2").appendTo(inputContainer.closest('.wbs-statement'));
+            SchemaAlignmentDialog._initField(inputContainer2, 'time', '');
+            inputContainer2.find('input').attr('placeholder', 'drag id column')//.attr('readonly', 'readonly')
+            var inputContainer3 = $('<div></div>').addClass('wbs-target-input').addClass("associator-input3").appendTo(inputContainer.closest('.wbs-statement'));
+            SchemaAlignmentDialog._initField(inputContainer3, 'time', '');
+            inputContainer3.find('input').attr('placeholder', 'drag associator column')//.attr('readonly', 'readonly')
+
+        }else{
+            inputContainer.closest('.wbs-statement').find(".associator-input2").remove();
+            inputContainer.closest('.wbs-statement').find(".associator-input3").remove();
+            inputContainer.closest('.wbs-statement').find("input").show();
+            //inputContainer.closest('.wbs-statement').fin
+        }
+
+        //SchemaAlignmentDialog._initField(inputContainer, 'wikibase-associator', value);
+    });
+
     // add rank
     var rank = $('<div></div>').addClass('wbs-rank-selector-icon').prependTo(inputContainer);
-
     // add qualifiers...
     var right = $('<div></div>').addClass('wbs-right').appendTo(statement);
     var qualifierContainer = $('<div></div>').addClass('wbs-qualifier-container').appendTo(right);
@@ -601,6 +662,15 @@ SchemaAlignmentDialog._addStatement = function(container, datatype, json) {
 
 SchemaAlignmentDialog._statementToJSON = function (statement) {
     var inputContainer = statement.find(".wbs-target-input").first();
+    console.log('statementtojson input', inputContainer)
+
+    // if( inputContainer.parent().find('input[type=checkbox]').prop('checked') === true ) {
+    //     console.log('is ass input')
+    //     console.log('value with ass input 2', SchemaAlignmentDialog._inputContainerToJSON(statement.find(".associator-input2")))
+    //     console.log('value with ass input 3', SchemaAlignmentDialog._inputContainerToJSON(statement.find(".associator-input3")))
+    // }else{
+    //     console.log('not ass imput')
+    // }
     var qualifiersList = new Array();
     var referencesList = new Array();
     statement.find('.wbs-qualifier-container').first().children().each(function () {
@@ -609,8 +679,33 @@ SchemaAlignmentDialog._statementToJSON = function (statement) {
     statement.find('.wbs-reference-container').first().children().each(function () {
         referencesList.push(SchemaAlignmentDialog._referenceToJSON($(this)));
     });
+    var value;
+    if( inputContainer.parent().find('input[type=checkbox]').prop('checked') === true ) {
+        console.log('is ass input')
+        console.log('value with ass input 2', SchemaAlignmentDialog._inputContainerToJSON(statement.find(".associator-input2")))
+        console.log('value with ass input 3', SchemaAlignmentDialog._inputContainerToJSON(statement.find(".associator-input3")))
+        //var text = statement.find(".associator-input2").find('.wbs-restricted-column-name').html() + statement.find(".associator-input3").find('.wbs-restricted-column-name').html();
+        var count = 2;
+        $('.column-header-name').each(function(e){
+            if( $(this).html() === statement.find(".associator-input2").find('.wbs-restricted-column-name').html() ){
+                console.log('id column matches', count);
+            }
+            count++;
+        });
+        value = {
+            // 'columnName':SchemaAlignmentDialog._inputContainerToJSON(statement.find(".associator-input2")),
+            // 'columnName2':SchemaAlignmentDialog._inputContainerToJSON(statement.find(".associator-input3")),
+            'idColumnName':statement.find(".associator-input2").find('.wbs-restricted-column-name').html(),
+            'columnName':statement.find(".associator-input3").find('.wbs-restricted-column-name').html(),
+            //'columnName':text,
+             //'columnName2':SchemaAlignmentDialog._inputContainerToJSON(statement.find(".associator-input3")),
+            'type': 'quickstatement-associator'
+        }
+    }else{
+        value = SchemaAlignmentDialog._inputContainerToJSON(inputContainer);
+    }
     return {
-        value:SchemaAlignmentDialog._inputContainerToJSON(inputContainer),
+        value:value,
         qualifiers: qualifiersList,
         references: referencesList,
     };
@@ -630,6 +725,7 @@ SchemaAlignmentDialog._addQualifier = function(container, json) {
 
   var qualifier = $('<div></div>').addClass('wbs-qualifier').appendTo(container);
   var toolbar1 = $('<div></div>').addClass('wbs-toolbar').appendTo(qualifier);
+
   var inputContainer = $('<div></div>').addClass('wbs-prop-input').appendTo(qualifier);
   var right = $('<div></div>').addClass('wbs-right').appendTo(qualifier);
   var deleteButton = SchemaAlignmentDialog._makeDeleteButton()
@@ -647,6 +743,7 @@ SchemaAlignmentDialog._addQualifier = function(container, json) {
 }
 
 SchemaAlignmentDialog._qualifierToJSON = function(elem) {
+    //console.log('here')
   var prop = elem.find(".wbs-prop-input").first();
   var target = elem.find(".wbs-target-input").first();
   return {
@@ -715,7 +812,8 @@ SchemaAlignmentDialog._updateReferencesNumber = function(container) {
 
 SchemaAlignmentDialog._getPropertyType = function(pid, callback) {
   $.ajax({
-      url:'https://www.wikidata.org/w/api.php',
+      url:'https://sandro-16.matrix.msu.edu/w/api.php',
+      // url:'https://www.wikidata.org/w/api.php',
       data: {
         action: "wbgetentities",
         format: "json",
@@ -748,6 +846,7 @@ SchemaAlignmentDialog._initPropertyField = function(inputContainer, targetContai
             label: data.name,
             datatype: datatype,
           });
+          //console.log('after get prop type')
           SchemaAlignmentDialog._addStatement(targetContainer, datatype, null);
           var addValueButtons = targetContainer.parent().find('.wbs-add-statement');
           var removeGroupButton = targetContainer.parent().find('.wbs-remove-statement-group');
@@ -772,15 +871,42 @@ SchemaAlignmentDialog._initPropertyField = function(inputContainer, targetContai
      if (initialValue.type === "wbpropconstant") {
         input.val(initialValue.label);
         input.addClass('wbs-validated-input');
-     } 
+     }
      inputContainer.data("jsonValue", initialValue);
   }
 
 }
 
 SchemaAlignmentDialog._initField = function(inputContainer, mode, initialValue, changedCallback) {
+    // //console.log('initfield', inputContainer, mode);
+    // // //console.log('ypel', typeof checkbox);
+    // // //console.log('ypel', $(checkbox));
+    //
+    // // if( mode !== 'wikibase-associator' ){
+    // //     $(inputContainer).find('input[type=checkbox]').attr('data-modeBeforeAssociator', mode);
+    // // }
+    // if( inputContainer.closest('.wbs-statement').find('input[type=checkbox]').prop('checked') === false ){
+    //     //console.log('initfield associator globalCheckbox', $(".associator-input2"));
+    //     //console.log('specific 2 input', inputContainer.closest('.wbs-statement').find(".associator-input2")[0])
+    //     // //console.log('checkbox mode', inputContainer.closest('.wbs-statement').find(".associator-input2").data('modebeforecheckbox'));
+    //     // return;
+    //     mode = inputContainer.closest('.wbs-statement').find('input[type=checkbox]').data('modebeforecheckbox');
+    //     inputContainer.closest('.wbs-statement').find(".associator-input2").remove();
+    //     //return;
+    //
+    //     //console.log('specific 2 input after', inputContainer.closest('.wbs-statement').find(".associator-input2")[0])
+    //     //mode = $(globalCheckbox).attr('data-modeBeforeAssociator');
+    // }else if( inputContainer.find('input[type=checkbox]').prop('checked') === true ){
+    //
+    // }
+    //
+    // //console.log('mode', mode, initialValue, this._reconService);
+    //
+    //
+    // //console.log('input remove', $(inputContainer).find('input'))
+    // $(inputContainer).find('input').remove();
   var input = $('<input></input>').appendTo(inputContainer);
- 
+
   if (! changedCallback) {
     changedCallback = SchemaAlignmentDialog._hasChanged;
   }
@@ -791,6 +917,7 @@ SchemaAlignmentDialog._initField = function(inputContainer, mode, initialValue, 
     } else {
         input.attr("placeholder", $.i18n._('wikidata-schema')["unit"]);
     }
+      //$(".associator-input2").remove();
     var endpoint = null;
     endpoint = this._reconService.suggest.entity;
     var suggestConfig = $.extend({}, endpoint);
@@ -808,24 +935,55 @@ SchemaAlignmentDialog._initField = function(inputContainer, mode, initialValue, 
     // adds tweaks to display the validation status more clearly, like in Wikidata
     fixSuggestInput(input);
 
-  } else if (this._reconService !== null && mode === "wikibase-property") {
-    var endpoint = null;
-    endpoint = this._reconService.suggest.property;
-    var suggestConfig = $.extend({}, endpoint);
-    suggestConfig.key = null;
-    suggestConfig.query_param_name = "prefix";
+  }
+  // else if (this._reconService !== null && mode === "wikibase-associator" ) {
+  //
+  //     //console.log('radio click', $(this) );
+  //     //return;
+  //
+  //
+  //
+  //     var input2 = $('<input></input>').appendTo(inputContainer).addClass("associator-input2");
+  //     input.attr("placeholder", "drag identifier column");
+  //     input2.attr("placeholder", "drag associator column");
+  //     //return;
+  //
+  //       // var endpoint = null;
+  //       // endpoint = this._reconService.suggest.entity;
+  //       // var suggestConfig = $.extend({}, endpoint);
+  //       // suggestConfig.key = null;
+  //       // suggestConfig.query_param_name = "prefix";
+  //       //
+  //       // input.suggestP(suggestConfig).bind("fb-select", function(evt, data) {
+  //       //     inputContainer.data("jsonValue", {
+  //       //         type : "wbitemconstant",
+  //       //         qid : data.id,
+  //       //         label: data.name,
+  //       //     });
+  //       //     changedCallback();
+  //       // });
+  //       // // adds tweaks to display the validation status more clearly, like in Wikidata
+  //       // fixSuggestInput(input);
+  //
+  //   }
+    else if (this._reconService !== null && mode === "wikibase-property") {
+        var endpoint = null;
+        endpoint = this._reconService.suggest.property;
+        var suggestConfig = $.extend({}, endpoint);
+        suggestConfig.key = null;
+        suggestConfig.query_param_name = "prefix";
 
-    input.suggestP(suggestConfig).bind("fb-select", function(evt, data) {
-        inputContainer.data("jsonValue", {
-            type : "wbpropconstant",
-            pid : data.id,
-            label: data.name,
-            datatype: "not-important",
+        input.suggestP(suggestConfig).bind("fb-select", function(evt, data) {
+            inputContainer.data("jsonValue", {
+                type : "wbpropconstant",
+                pid : data.id,
+                label: data.name,
+                datatype: "not-important",
+            });
+            changedCallback();
         });
-        changedCallback();
-    });
-    // adds tweaks to display the validation status more clearly, like in Wikidata
-    fixSuggestInput(input);
+        // adds tweaks to display the validation status more clearly, like in Wikidata
+        fixSuggestInput(input);
 
   } else if (mode === "time") {
      input.attr("placeholder", "YYYY(-MM(-DD))...");
@@ -912,14 +1070,14 @@ SchemaAlignmentDialog._initField = function(inputContainer, mode, initialValue, 
      .addClass('wbs-quantity-container')
      .width('40%')
      .appendTo(inputContainer);
-   
+
      var amountValue = null;
      var unitValue = null;
      if (initialValue) {
         amountValue = initialValue.amount;
         unitValue = initialValue.unit;
      }
- 
+
      var propagateValue = function() {
         inputContainer.data("jsonValue", {
            type: "wbquantityexpr",
@@ -928,7 +1086,7 @@ SchemaAlignmentDialog._initField = function(inputContainer, mode, initialValue, 
         });
         changedCallback();
      }
-     
+
      SchemaAlignmentDialog._initField(inputContainerAmount, "amount", amountValue, propagateValue);
      SchemaAlignmentDialog._initField(inputContainerUnit, "unit", unitValue, propagateValue);
 
@@ -944,6 +1102,8 @@ SchemaAlignmentDialog._initField = function(inputContainer, mode, initialValue, 
       propagateValue($(this).val());
       changedCallback();
     });
+    //console.log('mode not supported here')
+      //console.log('mode', mode)
     if (mode === "amount") {
         input.attr("placeholder", $.i18n._('wikidata-schema')["amount"]);
         SchemaAlignmentDialog.setupStringInputValidation(input, /^[\-+]?\d+(\.\d*)?(E[\-+]\d+)?$/);
@@ -997,7 +1157,9 @@ SchemaAlignmentDialog._initField = function(inputContainer, mode, initialValue, 
   // Make it droppable
   var acceptClass = ".wbs-draggable-column";
   var wbVariableType = "wbstringvariable";
+  //console.log('Mode here: ', mode);
   if (mode === "wikibase-item" || mode === "unit") {
+      //console.log('in item mode');
       acceptClass = ".wbs-reconciled-column";
       wbVariableType = "wbitemvariable";
   } else if (mode === "time") {
@@ -1008,12 +1170,14 @@ SchemaAlignmentDialog._initField = function(inputContainer, mode, initialValue, 
       wbVariableType = null; // not droppable directly
   } else if (mode === "language") {
       wbVariableType = "wblanguagevariable";
-  } 
-      
+  }
+  //console.log(wbVariableType);
+
   if (wbVariableType) {
     inputContainer.droppable({
         accept: acceptClass,
     }).on("drop", function (evt, ui) {
+        console.log('column drop', evt, ui);
         var column = ui.draggable.clone();
         acceptDraggableColumn(column);
         inputContainer.data("jsonValue", {
@@ -1021,7 +1185,7 @@ SchemaAlignmentDialog._initField = function(inputContainer, mode, initialValue, 
             columnName: ui.draggable.text(),
         });
         changedCallback();
-        return true; 
+        return true;
     }).on("dropactivate", function(evt, ui) {
         input.addClass("wbs-accepting-input");
     }).on("dropdeactivate", function(evt, ui) {
@@ -1070,6 +1234,7 @@ SchemaAlignmentDialog.setupStringInputValidation = function(input, regex) {
 
 SchemaAlignmentDialog._inputContainerToJSON = function (inputContainer) {
     var data = inputContainer.data();
+    //console.log('input container to json', data)
     if (data) {
        return data.jsonValue;
     } else {
@@ -1181,7 +1346,7 @@ SchemaAlignmentDialog._updateWarnings = function(warnings, totalCount) {
    for (var i = 0; i != warnings.length; i++) {
       var rendered = WarningsRenderer._renderWarning(warnings[i]);
       rendered.appendTo(table);
-   }   
+   }
 
    // update the counts
    if (totalCount) {

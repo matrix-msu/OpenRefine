@@ -101,16 +101,19 @@ var CustomSuggest = {};
   };
   $.suggest.suggestP.prototype = originalSuggestP.prototype;
 
+  console.log('type property here')
   $.extend(
     $.suggest.suggestP, 
     {
       defaults: $.extend(
         true,
         {},
-        $.suggest.suggest.defaults, {
+        $.suggest.suggest.defaults,
+          {
           scoring: "schema",
           type: "/type/property",
-          css: { pane: "fbs-pane fbs-pane-property" }
+          css: { pane: "fbs-pane fbs-pane-property" },
+          test: "testing"
         }
       )
     }

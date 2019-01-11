@@ -17,7 +17,7 @@ WarningsRenderer._renderEntity = function(entity) {
 
   var url = entity.iri;
   if (!url && entity.value) {
-     url = 'http://www.wikidata.org/entity/'+entity.value.id;
+     url = 'https://sandro-16.matrix.msu.edu/wiki/Special:EntityData/'+entity.value.id;
   }
 
   if (is_new) {

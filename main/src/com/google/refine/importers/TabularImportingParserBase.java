@@ -38,8 +38,10 @@ import java.io.Reader;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Iterator;
 
 import org.json.JSONObject;
+import org.json.JSONArray;
 
 import com.google.refine.expr.ExpressionUtils;
 import com.google.refine.importing.ImportingJob;
@@ -105,6 +107,26 @@ abstract public class TabularImportingParserBase extends ImportingParserBase {
         boolean storeBlankRows = JSONUtilities.getBoolean(options, "storeBlankRows", true);
         boolean storeBlankCellsAsNulls = JSONUtilities.getBoolean(options, "storeBlankCellsAsNulls", true);
         boolean includeFileSources = JSONUtilities.getBoolean(options, "includeFileSources", false);
+		
+        JSONArray jArr = JSONUtilities.getArray(options, "multiColumn");
+		System.out.println("multicolumn jArr");
+		System.out.println(jArr);
+		for(int i = 0; i < jArr.length();i++) {
+            JSONObject innerObj = jArr.getJSONObject(i);
+            for(Iterator it = innerObj.keys(); it.hasNext(); ) {
+                String key = (String)it.next();
+                System.out.println(key + ":" + innerObj.get(key));
+            }
+        }
+		
+		//Object[] multiColumnObject = JSONUtilities.toArray(multiColumn);
+		
+		
+		//System.out.println("multiColumnObject");
+		//System.out.println(multiColumnObject);
+		//System.out.println(Arrays.deepToString(multiColumn));
+		
+		
 
         int filenameColumnIndex = -1;
         if (includeFileSources) {
@@ -116,6 +138,7 @@ abstract public class TabularImportingParserBase extends ImportingParserBase {
         
         List<Object> cells = null;
         int rowsWithData = 0;
+		System.out.println("got here");
         
         try {
             while (!job.canceled && (cells = reader.getNextRowOfCells()) != null) {
@@ -137,6 +160,22 @@ abstract public class TabularImportingParserBase extends ImportingParserBase {
                         } else {
                             columnName = cell.toString().trim();
                         }
+						System.out.println(columnName);
+						for(int i = 0; i < jArr.length();i++) {
+							JSONObject innerObj = jArr.getJSONObject(i);
+							for(Iterator it = innerObj.keys(); it.hasNext(); ) {
+								String key = (String)it.next();
+								System.out.println(key + ":" + innerObj.get(key)+":"+columnName);
+								if( key.equals("columnName") && columnName.equals(innerObj.get(key)) ){
+									System.out.println("match");
+									ImporterUtilities.appendColumnName(columnNames, cells.size(), innerObj.get(key)+"'s extra column");
+									columnName = innerObj.get(key)+"is a multi";
+								}
+								// 
+								// System.out.println(key + ":" + innerObj.get(key));
+							}
+						}
+						
                         
                         ImporterUtilities.appendColumnName(columnNames, c, columnName);
                     }

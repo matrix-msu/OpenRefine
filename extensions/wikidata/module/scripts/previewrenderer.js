@@ -239,7 +239,7 @@ EditRenderer._renderValue = function(json, container) {
             params.datatype = json.datatype;
         }
         $.get(
-            'https://www.wikidata.org/w/api.php',
+            'https://sandro-16.matrix.msu.edu/w/api.php',
             params,
             function (data) {
                 if('result' in data) {

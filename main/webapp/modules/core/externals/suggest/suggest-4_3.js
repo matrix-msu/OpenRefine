@@ -1202,6 +1202,7 @@
               // filter=(all%20alias{start}:/people/pers)&prefixed=true
               filter.push("(any alias{start}:\"" + query + "\" mid:\"" +
                           query + "\")");
+              console.log('set prefixed')
               extend_ac_param['prefixed'] = true;
               query = "";
           }
