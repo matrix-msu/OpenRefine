@@ -34,14 +34,9 @@ Here is an outline of the current workflow:
 ***
 
 
-##### Additional information from OpenRefine's github repository below
+##### Additional links to OpenRefine things below
 
-Download
------------------------
 * [OpenRefine Releases](https://github.com/OpenRefine/OpenRefine/releases)
-
-Documentation and Videos
--------------------------
 * [Documentation Wiki](https://github.com/OpenRefine/OpenRefine/wiki/Documentation-For-Users)
 * [FAQ](https://github.com/OpenRefine/OpenRefine/wiki/FAQ)
 * [Official Website and tutorial videos](http://openrefine.org)
