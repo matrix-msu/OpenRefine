@@ -34,7 +34,7 @@ Here is an outline of the current workflow:
 ***
 
 
-#### Additional information from OpenRefine's github repository below
+##### Additional information from OpenRefine's github repository below
 
 Download
 -----------------------
