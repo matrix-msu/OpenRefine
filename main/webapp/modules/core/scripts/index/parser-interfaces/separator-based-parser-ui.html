@@ -78,4 +78,28 @@
         <td><label for="$include-file-sources" id="or-import-source"></label></td></tr>
     </table></div></td>
   </tr>
+  
+  <tr class="multi-column-parser">
+    <td>
+		<input type="checkbox" class="hasMultiColumn" />
+		<label id="hasMultiColumnLabel">This sheet has a multi-column</label>
+		<div class="columnHasTypesOptional" style="display:none;border:1px solid black;padding:12px;margin-top:10px">
+			<label class="multiColumnValueSeperator" style="margin-left:20px">Column name: </label>
+			<input type="text" class="lightweight columnName multiTextOption" size="5" />
+			<br>
+			<label class="multiColumnValueSeperator" style="margin-left:20px">Values are seperated by: </label>
+			<input type="text" class="lightweight valueSeparator multiTextOption" size="5" />
+			<br>
+			<br>
+			<input type="checkbox" class="columnHasTypes" />
+			<label class="columnHasTypesLabel">Column values contain the types</label>
+			<div class="columnTypeValueOptional" style="display:none">
+				<label class="columnTypeValueSeperator" style="margin-left:20px">Types and values are seperated by: </label>
+				<input type="text" class="lightweight multiTextOption typeValueDelimiter" size="5" />
+			</div>
+		</div>
+		<p class="addAnotherMulti" style="color:blue;margin-top:15px;cursor:pointer;display:none">add another multi-column</p>
+	</td>
+  </tr>
+  
 </table></div>
