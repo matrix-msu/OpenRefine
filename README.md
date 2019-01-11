@@ -1,54 +1,47 @@
-# OpenRefine
+# Matrix Msu OpenRefine
 
-[![Join the chat at https://gitter.im/OpenRefine/OpenRefine](https://badges.gitter.im/OpenRefine/OpenRefine.svg)](https://gitter.im/OpenRefine/OpenRefine?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Build Status](https://travis-ci.org/OpenRefine/OpenRefine.png?branch=master)](https://travis-ci.org/OpenRefine/OpenRefine) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/210578308bba42c5922c767493e83cf4)](https://www.codacy.com/app/OpenRefine/OpenRefine) [![Codacy Badge](https://api.codacy.com/project/badge/Coverage/210578308bba42c5922c767493e83cf4)](https://www.codacy.com/app/OpenRefine/OpenRefine) [![Translation progress](https://hosted.weblate.org/widgets/openrefine/-/svg-badge.svg)](https://hosted.weblate.org/engage/openrefine/?utm_source=widget)
 
-OpenRefine is a Java-based power tool that allows you to load data, understand it,
-clean it up, reconcile it, and augment it with data coming from
-the web. All from a web browser and the comfort and privacy of your own computer.
+#### This is a pre-alpha version of this code. Meaning somethings are completely missing.
 
-[<img src="https://github.com/OpenRefine/OpenRefine/blob/master/graphics/icon/open-refine-320px.png" align="right">](http://openrefine.org)
+***
+
+
+This is the repository for the OpenRefine portion of the enslaved project suite's data import process.
+
+We are trying to establish a method for enslaved users to be able to import their data with varying structures into a well defined wikidata structure. To do this we are exploring using a combination of a modified version of OpenRefine and a modified version of Quickstatements 2.0. The idea is that OpenRefine will map the data to the wikidata instance that matrix is running and then use Quickstatements for the import.
+
+The main reason we need a modified version of OpenRefine is so that it can support additional functionality that we are adding to Quickstatements. Quickstatements does not support import jobs that have associations between data within the same import job. That is why we need to first modify Quickstatements and edit OpenRefine to support this additional functionality. 
+
+A second more minor reason is the probability that some of the data that will be used is structured in a way that OpenRefine doesn't support for this flow. This way we can add support for specialized data cleaning within the OpenRefine import process.
+
+There will likely be improvements or entire changes to this flow in the future as this is a multiple phase solution project.
+
+The code is currently minorly different than OpenRefine's master so please refer to their documentation for install and use instructions.
+
+Here is an outline of the current workflow:
+-Select a single schemes csv file
+-Use the multi-column cleaning tool
+-Import
+-Reconsile your labels columns to double check your data is new
+-Mark which rows you want to be created as new items 
+-Reconsile any columns that are values already inside of wikibase
+-Create the Quickstatements wikibase schema
+-Export to Quickstatements
+-Go to Quickstatements and import your data into wikidata
+
+
+***
+***
+
+
+#### Additional information from OpenRefine's github repository below
 
 Download
 -----------------------
 * [OpenRefine Releases](https://github.com/OpenRefine/OpenRefine/releases)
-
-Run from source
-------------------
-If you have cloned this repository to your computer, you can run OpenRefine with:
-* `./refine` on Mac OS and Linux
-* `refine.bat` on Windows
-
-This requires JDK 8 and Apache Ant.
 
 Documentation and Videos
 -------------------------
 * [Documentation Wiki](https://github.com/OpenRefine/OpenRefine/wiki/Documentation-For-Users)
 * [FAQ](https://github.com/OpenRefine/OpenRefine/wiki/FAQ)
 * [Official Website and tutorial videos](http://openrefine.org)
-
-Contributing to the project
----------------------------
-* [Developers Guide & Architecture](https://github.com/OpenRefine/OpenRefine/wiki/Documentation-For-Developers)
-* [Contributing Guide](https://github.com/OpenRefine/OpenRefine/blob/master/CONTRIBUTING.md)
-* [Project Governance](https://github.com/OpenRefine/OpenRefine/blob/master/GOVERNANCE.md)
-
-Contact us
-----------
-* [Mailing List](https://groups.google.com/forum/#!forum/openrefine)
-* [Twitter](http://www.twitter.com/openrefine)
-
-Licensing and legal issues
---------------------------
-OpenRefine is open source software and is licensed under the BSD license
-located in the [LICENSE.txt](LICENSE.txt). See the folder `licenses` for information on open source
-libraries that OpenRefine depends on.
-
-Credits
--------
-This software was created by Metaweb Technologies, Inc. and originally written
-and conceived by David Huynh <dfhuynh@google.com>. Metaweb Technologies, Inc.
-was acquired by Google, Inc. in July 2010 and the product was renamed Google Refine.
-In October 2012, it was renamed OpenRefine as it transitioned to a 
-community-supported product.
-
-See `AUTHORS.md` for the list of OpenRefine contributors.
