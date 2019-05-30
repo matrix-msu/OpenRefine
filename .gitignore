@@ -27,6 +27,7 @@ test-out/
 /bin
 open-refine.log
 .vscode
+.idea/
 
 main/target/
 main/webapp/WEB-INF/lib/
