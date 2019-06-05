@@ -55,6 +55,7 @@ public class QuickStatementsExporter implements WriterExporter {
 
     public static final String impossibleSchedulingErrorMessage = "This edit batch cannot be performed with QuickStatements due to the structure of its new items.";
     public static final String noSchemaErrorMessage = "No schema was provided. You need to align your project with Wikidata first.";
+	public static int numCreated = 0;
 
     public QuickStatementsExporter() {
     }
@@ -67,6 +68,7 @@ public class QuickStatementsExporter implements WriterExporter {
     @Override
     public void export(Project project, Properties options, Engine engine, Writer writer)
             throws IOException {
+		QuickStatementsExporter.numCreated = 0;
         WikibaseSchema schema = (WikibaseSchema) project.overlayModels.get("wikibaseSchema");
         if (schema == null) {
             writer.write(noSchemaErrorMessage);
@@ -124,8 +126,19 @@ public class QuickStatementsExporter implements WriterExporter {
     protected void translateItem(ItemUpdate item, Writer writer)
             throws IOException {
         String qid = item.getItemId().getId();
+		String pid = "";
         if (item.isNew()) {
-            writer.write("CREATE\n");
+            //writer.write("CREATE\n");
+			String newId = "";
+            for (Statement s : item.getAddedStatements()) {		
+                pid = s.getClaim().getMainSnak().getPropertyId().getId();		
+                if( pid.equals("quickstatementIdentifier") ) {		
+                    newId = "-"+s.getClaim().getValue();		
+                }		
+            }		
+            int num = ++QuickStatementsExporter.numCreated;
+            writer.write("CREATE"+newId+"\n");
+			
             qid = "LAST";
             item = item.normalizeLabelsAndAliases();
         }
@@ -135,6 +148,10 @@ public class QuickStatementsExporter implements WriterExporter {
         translateNameDescr(qid, item.getAliases(), "A", item.getItemId(), writer);
 
         for (Statement s : item.getAddedStatements()) {
+			pid = s.getClaim().getMainSnak().getPropertyId().getId();		
+            if( pid.equals("quickstatementIdentifier") ){		
+                continue;
+			}
             translateStatement(qid, s, s.getClaim().getMainSnak().getPropertyId().getId(), true, writer);
         }
         for (Statement s : item.getDeletedStatements()) {

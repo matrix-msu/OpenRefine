@@ -43,6 +43,7 @@ import org.wikidata.wdtk.datamodel.interfaces.SnakGroup;
 import org.wikidata.wdtk.datamodel.interfaces.Statement;
 import org.wikidata.wdtk.datamodel.interfaces.StatementRank;
 import org.wikidata.wdtk.datamodel.interfaces.Value;
+import org.wikidata.wdtk.datamodel.interfaces.StringValue;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -52,13 +53,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class WbStatementExpr {
 
     private WbExpression<? extends Value> mainSnakValueExpr;
+	public String identifiercolumn;
     private List<WbSnakExpr> qualifierExprs;
     private List<WbReferenceExpr> referenceExprs;
 
     @JsonCreator
     public WbStatementExpr(@JsonProperty("value") WbExpression<? extends Value> mainSnakValueExpr,
             @JsonProperty("qualifiers") List<WbSnakExpr> qualifierExprs,
-            @JsonProperty("references") List<WbReferenceExpr> referenceExprs) {
+            @JsonProperty("references") List<WbReferenceExpr> referenceExprs,
+			@JsonProperty("identifiercolumn") String identifiercolumn) {
         Validate.notNull(mainSnakValueExpr);
         this.mainSnakValueExpr = mainSnakValueExpr;
         if (qualifierExprs == null) {
@@ -141,7 +144,12 @@ public class WbStatementExpr {
     public List<WbReferenceExpr> getReferences() {
         return referenceExprs;
     }
-
+	
+	@JsonProperty("identifiercolumn")		
+    public String getIdentifiercolumn() {		
+        return identifiercolumn;		
+    }
+	
     @Override
     public boolean equals(Object other) {
         if (other == null || !WbStatementExpr.class.isInstance(other)) {
@@ -154,6 +162,6 @@ public class WbStatementExpr {
 
     @Override
     public int hashCode() {
-        return mainSnakValueExpr.hashCode() + qualifierExprs.hashCode() + referenceExprs.hashCode();
+        return mainSnakValueExpr.hashCode() + qualifierExprs.hashCode() + referenceExprs.hashCode()+identifiercolumn.hashCode();
     }
 }

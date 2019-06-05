@@ -87,6 +87,18 @@ Refine.SeparatorBasedParserUI.prototype.getOptions = function() {
     }
     return def;
   };
+  options.multiColumn = [];		
+  if( $(this._optionContainerElmts.optionsContainer).find('.hasMultiColumn').is(":checked") ){ //has multi column stuffs		
+	$(this._optionContainerElmts.optionsContainer).find('.columnHasTypesOptional').each(function(i, el){		
+		options.multiColumn.push({		
+			'columnName' : $(el).find('.columnName').val(),		
+			'valueSeparator' : $(el).find('.valueSeparator').val(),		
+			'columnHasTypes' : $(el).find('.columnHasTypes').is(":checked"),		
+			'typeValueDelimiter' : $(el).find('.typeValueDelimiter').val()		
+		});		
+				
+	});		
+  }
   if (this._optionContainerElmts.ignoreCheckbox[0].checked) {
     options.ignoreLines = parseIntDefault(this._optionContainerElmts.ignoreInput[0].value, -1);
   } else {
@@ -242,10 +254,38 @@ Refine.SeparatorBasedParserUI.prototype._initialize = function() {
   };
   this._optionContainer.find("input").bind("change", onChange);
   this._optionContainer.find("select").bind("change", onChange);
+  this._optionContainer.find(".addAnotherMulti").bind("click", onChange);
   this._optionContainerElmts.columnNamesInput.bind("keyup",onChange);
 };
 
+Refine.SeparatorBasedParserUI.prototype._addMultiColumn = function(target) {
+	console.log('in add multi column');		
+	if( $(target).hasClass('columnHasTypes') ){		
+		$(target).parents('.multi-column-parser').find('.columnTypeValueOptional').toggle();		
+	}else if( $(target).hasClass('addAnotherMulti') ){		
+		var html = $('.columnHasTypesOptional').first()[0].outerHTML;		
+		$('.columnHasTypesOptional').last().after(html);		
+		$('.columnHasTypesOptional').last().css('margin-top', '10px');		
+	}else if( $(target).hasClass('multiTextOption') ){		
+				
+	}else{		
+		$(target).parents('.multi-column-parser').find('.columnHasTypesOptional').toggle();		
+		$(target).parents('.multi-column-parser').find('.addAnotherMulti').toggle();		
+	}		
+			
+	if( $(target).hasClass('valueSeparator') || $(target).hasClass('typeValueDelimiter') ){		
+		return true;		
+	}		
+	return false;		
+};
+
 Refine.SeparatorBasedParserUI.prototype._scheduleUpdatePreview = function() {
+  if( $(e.target).parents('.multi-column-parser').length > 0 ){ //is new multi-column stuff.		
+	var addMultiReturn = this._addMultiColumn($(e.target));		
+	if( !addMultiReturn ){		
+	  return;		
+    }		
+  }
   if (this._timerID !== null) {
     window.clearTimeout(this._timerID);
     this._timerID = null;

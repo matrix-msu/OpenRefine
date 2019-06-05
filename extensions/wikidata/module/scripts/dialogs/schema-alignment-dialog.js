@@ -128,7 +128,7 @@ SchemaAlignmentDialog.setUpTabs = function() {
         .addClass('disabled')
         .click(function() { SchemaAlignmentDialog._discardChanges(); });
 
-  this._wikibasePrefix = "http://www.wikidata.org/entity/"; // hardcoded for now
+  this._wikibasePrefix = "https://sandro-16.matrix.msu.edu/wiki/Special:EntityData/"; // hardcoded for now
 
   // Init the column area
   this.updateColumns();
@@ -166,6 +166,12 @@ SchemaAlignmentDialog.updateColumns = function() {
   for (var i = 0; i < columns.length; i++) {
      var column = columns[i];
      var reconConfig = column.reconConfig;
+	 if( reconConfig && reconConfig.identifierSpace === "https://sandro-16.matrix.msu.edu/Special:EntityData/" ){
+		var cell = SchemaAlignmentDialog._createDraggableColumn(column.name,true);
+	 }else{
+		var cell = SchemaAlignmentDialog._createDraggableColumn(column.name,		
+             reconConfig && reconConfig.identifierSpace === this._wikibasePrefix && column.reconStats);
+	 }
      var cell = SchemaAlignmentDialog._createDraggableColumn(column.name, 
         reconConfig && reconConfig.identifierSpace === this._wikibasePrefix && column.reconStats);
      this._columnArea.append(cell);
@@ -250,6 +256,7 @@ SchemaAlignmentDialog._reset = function(schema) {
 SchemaAlignmentDialog._save = function(onDone) {
   var self = this;
   var schema = this.getJSON();
+  schema.wikibasePrefix = "https://sandro-16.matrix.msu.edu/wiki/Special:EntityData/";
 
   if (schema === null) {
     alert($.i18n('wikidata-schema/incomplete-schema-could-not-be-saved'));
@@ -500,6 +507,7 @@ SchemaAlignmentDialog._addStatementGroup = function(item, json) {
   var statementGroup = $('<div></div>').addClass('wbs-statement-group');
   var inputContainer = $('<div></div>').addClass('wbs-prop-input').appendTo(statementGroup);
   var right = $('<div></div>').addClass('wbs-right').appendTo(statementGroup);
+  var checkbox = $('<div class="wbs-associatorCheckbox">&nbsp;&nbsp;Values are items being created in this import:<input data-modebeforecheckbox="wikibase-item" type="checkbox"></div>').appendTo(statementGroup);
   var statementContainer = $('<div></div>').addClass('wbs-statement-container').appendTo(right);
   SchemaAlignmentDialog._initPropertyField(inputContainer, statementContainer, property);
   var toolbar = $('<div></div>').addClass('wbs-toolbar').appendTo(right);
@@ -578,6 +586,51 @@ SchemaAlignmentDialog._addStatement = function(container, datatype, json) {
         e.preventDefault();
     }).appendTo(toolbar1);
 
+	  //add association check button		
+    var aCheckHtml = '&nbsp;&nbsp;Values are items being created in this import:<input data-modeBeforeCheckbox="'+datatype+'" type="checkbox">';		
+    var associatorCheckbox = $('<div>'+aCheckHtml+'</div>').addClass('wbs-associatorCheckbox').appendTo(statement);		
+    associatorCheckbox.find('input').click(function(e) {	
+        ////console.log('associator checkbox', associatorCheckbox);		
+        //e.preventDefault();		
+        var input = inputContainer.closest('.wbs-statement').find('input').first();		
+        if( inputContainer.closest('.wbs-statement').find('input[type=checkbox]').prop('checked') === true ){		
+            // var input2 = $('<input></input>').appendTo(inputContainer).addClass("associator-input2").addClass('wbs-unvalidated-input');		
+            //		
+            //input.attr("placeholder", "drag identifier column");		
+            //input.next().find('.wbs-remove').click();		
+            input.remove();		
+            // input2.attr("placeholder", "drag associator column");		
+            // input.attr('data-placeholder',input.attr('placeholder'));		
+            // input.attr('placeholder','drag identifier column');		
+            // var statement = $('<div></div>').addClass('wbs-statement');		
+            var input2Val = "";		
+            var input3Val = "";		
+            // if( value.type === "quickstatement-associator" ){		
+            //     input2Val = json.identifiercolumn;		
+            //     input3Val = value.columnName;		
+            // }		
+            //console.log('after', input2Val,input3Val,value)		
+            // inputContainer.closest('.wbs-statement').find("input").hide();		
+            // var inputContainer2 = $('<div></div>').addClass('wbs-target-input').addClass("associator-input2").appendTo(inputContainer.closest('.wbs-statement'));		
+            // SchemaAlignmentDialog._initField(inputContainer2, 'time', value);		
+            // inputContainer2.find('input').attr('placeholder', 'drag id column')//.attr('readonly', 'readonly')		
+            var inputContainer3 = $('<div></div>').addClass('wbs-target-input').addClass("associator-input3").appendTo(inputContainer.closest('.wbs-statement'));		
+            SchemaAlignmentDialog._initField(inputContainer3, 'time', value);		
+            inputContainer3.find('input').attr('placeholder', 'drag associator column')//.attr('readonly', 'readonly')		
+        }else{		
+            inputContainer.closest('.wbs-statement').find(".associator-input2").remove();		
+            inputContainer.closest('.wbs-statement').find(".associator-input3").remove();		
+            inputContainer.closest('.wbs-statement').find("input").show();		
+            //inputContainer.closest('.wbs-statement').fin		
+        }		
+        //SchemaAlignmentDialog._initField(inputContainer, 'wikibase-associator', value);		
+    });			
+    if( value && value.hasOwnProperty('type') && value.type === "quickstatement-associator" ){		
+        associatorCheckbox.find('input').click();			
+        var idColumn = $('.wbs-draggable-column').filter(function() {return $(this).text() === json.identifiercolumn;});		
+        $(idColumn).mousedown();		
+        $(statement).find(".associator-input2").mouseup();			
+    }
     // add rank
     var rank = $('<div></div>').addClass('wbs-rank-selector-icon').prependTo(inputContainer);
 
@@ -674,18 +727,45 @@ SchemaAlignmentDialog._statementToJSON = function (statement) {
           referencesList.push(referenceJSON);
         }
     });
-    var valueJSON = SchemaAlignmentDialog._inputContainerToJSON(inputContainer);
-    if (referencesList.length === referencesDom.length &&
-        qualifiersList.length === qualifiersDom.length &&
-        valueJSON !== null) {
-      return {
-        value: valueJSON,
+	
+	
+	var value;
+    if( inputContainer.parent().find('input[type=checkbox]').prop('checked') === true ) {
+        var count = 2;
+        $('.column-header-name').each(function(e){
+            if( $(this).html() === statement.find(".associator-input2").find('.wbs-restricted-column-name').html() ){
+                console.log('id column matches', count);
+            }
+            count++;
+        });
+        value = {
+            'columnName':statement.find(".associator-input3").find('.wbs-restricted-column-name').html(),
+            'type': 'quickstatement-associator'
+        }
+    }else{
+        //value = SchemaAlignmentDialog._inputContainerToJSON(inputContainer);
+		var valueJSON = SchemaAlignmentDialog._inputContainerToJSON(inputContainer);
+		if (
+			referencesList.length === referencesDom.length &&
+			qualifiersList.length === qualifiersDom.length &&
+			valueJSON !== null
+		) {
+			value = valueJSON;
+		  //return {
+			//value: valueJSON,
+			//qualifiers: qualifiersList,
+			//references: referencesList,
+		  //};
+		} else {
+		  return null;
+		}
+    }
+	return {
+        value:value,
         qualifiers: qualifiersList,
         references: referencesList,
-      };
-    } else {
-      return null;
-    }
+        //identifiercolumn: statement.find(".associator-input2").find('.wbs-restricted-column-name').html()
+    };
 };
 
 /**************
@@ -832,7 +912,8 @@ SchemaAlignmentDialog._copyReference = function(reference) {
 
 SchemaAlignmentDialog._getPropertyType = function(pid, callback) {
   $.ajax({
-      url:'https://www.wikidata.org/w/api.php',
+	  url:'https://sandro-16.matrix.msu.edu/w/api.php',
+      //url:'https://www.wikidata.org/w/api.php',
       data: {
         action: "wbgetentities",
         format: "json",
@@ -859,9 +940,14 @@ SchemaAlignmentDialog._initPropertyField = function(inputContainer, targetContai
         // Fetch the type of this property and add the appropriate target value type
         var statementGroup = inputContainer.parents(".wbs-statement-group, .wbs-qualifier").first();
         SchemaAlignmentDialog._getPropertyType(data.id, function(datatype) {
+		  var tempId = data.id;		
+          if( $(inputContainer).closest('.wbs-statement-group').find('input[type=checkbox]').prop('checked') === true ){		
+            tempId = "D" + tempId;		
+          }
           inputContainer.data("jsonValue", {
             type : "wbpropconstant",
-            pid : data.id,
+            //pid : data.id,
+			pid : tempId,
             label: data.name,
             datatype: datatype,
           });
@@ -879,6 +965,28 @@ SchemaAlignmentDialog._initPropertyField = function(inputContainer, targetContai
         var removeGroupButton = targetContainer.parent().find('.wbs-remove-statement-group');
         addValueButtons.hide();
         removeGroupButton.show();
+		$('.quickstatementSuggest').remove();		
+        var quickstatementIdentifier = '<li class="fbs-item quickstatementSuggest"><div class="fbs-item-name"><div class="fbs-item-type">P99999</div><label><div>Quickstatement_Identifier</div>Stuff</label><span></span></div></li>';		
+        $(data.pane).append(quickstatementIdentifier);		
+        $(data.pane).find('.quickstatementSuggest').bind("click", function(evt, data) {
+            // Fetch the type of this property and add the appropriate target value type		
+            var statementGroup = inputContainer.parents(".wbs-statement-group, .wbs-qualifier").first();		
+            //SchemaAlignmentDialog._getPropertyType(data.id, function(datatype) {		
+                inputContainer.data("jsonValue", {		
+                    type : "wbpropconstant",		
+                    pid : 'quickstatementIdentifier',		
+                    label: 'quickstatementIdentifier',		
+                    datatype: 'quickstatementIdentifier',		
+                });		
+                //console.log('after get prop type')		
+                SchemaAlignmentDialog._addStatement(targetContainer, 'quickstatementIdentifier', null);		
+                var addValueButtons = targetContainer.parent().find('.wbs-add-statement');		
+                var removeGroupButton = targetContainer.parent().find('.wbs-remove-statement-group');		
+                removeGroupButton.hide();		
+                addValueButtons.show();		
+            //});		
+            SchemaAlignmentDialog._hasChanged();		
+        });
     });
    // adds tweaks to display the validation status more clearly, like in Wikidata
    fixSuggestInput(input);
@@ -918,6 +1026,7 @@ SchemaAlignmentDialog._initField = function(inputContainer, mode, initialValue, 
     }
 
 
+	//JOSH - suggest is suggestP in old
     input.suggest(suggestConfig).bind("fb-select", function(evt, data) {
         inputContainer.data("jsonValue", {
             type : "wbitemconstant",
@@ -1090,6 +1199,7 @@ SchemaAlignmentDialog._initField = function(inputContainer, mode, initialValue, 
         mode !== "amount" &&
         mode !== "tabular-data" &&
         mode !== "commonsMedia" &&
+		mode !== "quickstatementIdentifier" &&
         mode !== "geo-shape" &&
         mode !== "math") {
        alert($.i18n('wikidata-schema/datatype-not-supported-yet'));
