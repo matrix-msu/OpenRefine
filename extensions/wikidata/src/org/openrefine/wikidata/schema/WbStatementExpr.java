@@ -60,8 +60,9 @@ public class WbStatementExpr {
     @JsonCreator
     public WbStatementExpr(@JsonProperty("value") WbExpression<? extends Value> mainSnakValueExpr,
             @JsonProperty("qualifiers") List<WbSnakExpr> qualifierExprs,
-            @JsonProperty("references") List<WbReferenceExpr> referenceExprs,
-			@JsonProperty("identifiercolumn") String identifiercolumn) {
+            @JsonProperty("references") List<WbReferenceExpr> referenceExprs//,
+//			@JsonProperty("identifiercolumn") String identifiercolumn
+) {
         Validate.notNull(mainSnakValueExpr);
         this.mainSnakValueExpr = mainSnakValueExpr;
         if (qualifierExprs == null) {
