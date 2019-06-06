@@ -142,7 +142,8 @@ ReconciliationManager.getOrRegisterServiceFromUrl = function(url, f) {
 
 ReconciliationManager.ensureDefaultServicePresent = function() {
    var lang = $.i18n('core-recon/wd-recon-lang');
-   var url = "https://tools.wmflabs.org/openrefine-wikidata/"+lang+"/api";
+   //var url = "https://tools.wmflabs.org/openrefine-wikidata/"+lang+"/api";
+   var url = "http://sandro-32.matrix.msu.edu/"+lang+"/api";
    ReconciliationManager.getOrRegisterServiceFromUrl(url, function(service) { });
    return url;
 };
