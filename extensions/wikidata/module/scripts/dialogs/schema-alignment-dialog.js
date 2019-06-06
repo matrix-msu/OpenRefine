@@ -172,8 +172,6 @@ SchemaAlignmentDialog.updateColumns = function() {
 		var cell = SchemaAlignmentDialog._createDraggableColumn(column.name,		
              reconConfig && reconConfig.identifierSpace === this._wikibasePrefix && column.reconStats);
 	 }
-     var cell = SchemaAlignmentDialog._createDraggableColumn(column.name, 
-        reconConfig && reconConfig.identifierSpace === this._wikibasePrefix && column.reconStats);
      this._columnArea.append(cell);
   }
 
