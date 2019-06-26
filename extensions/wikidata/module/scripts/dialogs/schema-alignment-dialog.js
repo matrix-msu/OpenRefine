@@ -128,7 +128,8 @@ SchemaAlignmentDialog.setUpTabs = function() {
         .addClass('disabled')
         .click(function() { SchemaAlignmentDialog._discardChanges(); });
 
-  this._wikibasePrefix = "https://sandro-16.matrix.msu.edu/wiki/Special:EntityData/"; // hardcoded for now
+  //this._wikibasePrefix = "https://sandro-16.matrix.msu.edu/wiki/Special:EntityData/"; // hardcoded for now
+  this._wikibasePrefix = "https://chyron-31.matrix.msu.edu/wiki/Special:EntityData/"; // hardcoded for now
 
   // Init the column area
   this.updateColumns();
@@ -166,7 +167,12 @@ SchemaAlignmentDialog.updateColumns = function() {
   for (var i = 0; i < columns.length; i++) {
      var column = columns[i];
      var reconConfig = column.reconConfig;
-	 if( reconConfig && reconConfig.identifierSpace === "https://sandro-16.matrix.msu.edu/Special:EntityData/" ){
+	 //if( reconConfig && reconConfig.identifierSpace === "https://sandro-16.matrix.msu.edu/Special:EntityData/" ){
+      //console.log('here', reconConfig.identifierSpace);
+      if( reconConfig && reconConfig.identifierSpace){
+          console.log('here reconconfig id space', reconConfig.identifierSpace);
+      }
+	 if( reconConfig && reconConfig.identifierSpace === "https://chyron-31.matrix.msu.edu/Special:EntityData/" ){
 		var cell = SchemaAlignmentDialog._createDraggableColumn(column.name,true);
 	 }else{
 		var cell = SchemaAlignmentDialog._createDraggableColumn(column.name,		
@@ -254,7 +260,8 @@ SchemaAlignmentDialog._reset = function(schema) {
 SchemaAlignmentDialog._save = function(onDone) {
   var self = this;
   var schema = this.getJSON();
-  schema.wikibasePrefix = "https://sandro-16.matrix.msu.edu/wiki/Special:EntityData/";
+  //schema.wikibasePrefix = "https://sandro-16.matrix.msu.edu/wiki/Special:EntityData/";
+  schema.wikibasePrefix = "https://chyron-31.matrix.msu.edu/wiki/Special:EntityData/";
 
   if (schema === null) {
     alert($.i18n('wikidata-schema/incomplete-schema-could-not-be-saved'));
@@ -910,7 +917,8 @@ SchemaAlignmentDialog._copyReference = function(reference) {
 
 SchemaAlignmentDialog._getPropertyType = function(pid, callback) {
   $.ajax({
-	  url:'https://sandro-16.matrix.msu.edu/w/api.php',
+	  url:'https://chyron-31.matrix.msu.edu/w/api.php',
+	  //url:'https://sandro-16.matrix.msu.edu/w/api.php',
       //url:'https://www.wikidata.org/w/api.php',
       data: {
         action: "wbgetentities",
