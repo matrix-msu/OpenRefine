@@ -67,7 +67,7 @@ public class NewItemScrutinizer extends EditScrutinizer {
             boolean typeFound = false;
             for (StatementGroup group : update.getAddedStatementGroups()) {
                 String pid = group.getProperty().getId();
-                if ("P31".equals(pid) || "P279".equals(pid) || "P3".equals(pid) ) {
+                if ("P31".equals(pid) || "P279".equals(pid)) {
                     typeFound = true;
                     break;
                 }

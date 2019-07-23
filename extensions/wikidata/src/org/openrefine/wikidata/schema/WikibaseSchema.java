@@ -61,8 +61,7 @@ public class WikibaseSchema implements OverlayModel {
     protected List<WbItemDocumentExpr> itemDocumentExprs = new ArrayList<WbItemDocumentExpr>();
 
     //protected String baseIri = "http://www.wikidata.org/entity/";	
-    //protected String baseIri = "https://sandro-16.matrix.msu.edu/wiki/Special:EntityData/";
-    protected String baseIri = "https://chyron-31.matrix.msu.edu/wiki/Special:EntityData/";
+    protected String baseIri = "https://sandro-16.matrix.msu.edu/wiki/Special:EntityData/";
 
     /**
      * Constructor.
