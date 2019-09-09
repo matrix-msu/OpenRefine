@@ -24,6 +24,7 @@
 package org.openrefine.wikidata.qa.scrutinizers;
 
 import org.openrefine.wikidata.qa.QAWarning;
+import org.openrefine.wikidata.schema.WbGetConfigValues;
 import org.openrefine.wikidata.updates.ItemUpdate;
 import org.wikidata.wdtk.datamodel.interfaces.StatementGroup;
 
@@ -39,6 +40,9 @@ public class NewItemScrutinizer extends EditScrutinizer {
     public static final String deletedStatementsType = "new-item-with-deleted-statements";
     public static final String noTypeType = "new-item-without-P31-or-P279";
     public static final String newItemType = "new-item-created";
+    public static String referstoPlaceofOrigin;
+    public static String subclassOf;
+    
 
     @Override
     public void scrutinize(ItemUpdate update) {
@@ -66,8 +70,11 @@ public class NewItemScrutinizer extends EditScrutinizer {
             // Try to find a "instance of" or "subclass of" claim
             boolean typeFound = false;
             for (StatementGroup group : update.getAddedStatementGroups()) {
+                WbGetConfigValues props = new WbGetConfigValues();  
                 String pid = group.getProperty().getId();
-                if ("P31".equals(pid) || "P279".equals(pid)) {
+                String referstoPlaceofOrigin = props.getReferstoPlaceofOriginValue();
+                String subclassOf = props.getSubclassOfValue();
+                if (referstoPlaceofOrigin.equals(pid) || subclassOf.equals(pid)) {
                     typeFound = true;
                     break;
                 }
