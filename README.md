@@ -18,6 +18,15 @@ If you have cloned this repository to your computer, you can run OpenRefine with
 * `./refine` on Mac OS and Linux
 * `refine.bat` on Windows
 
+Wikidata Extension Configuration
+------------------
+Wikidata uses specific configuration files to point to different wiki installations,
+keep in mind there are two; one for Java and the other for Javascript. After editing Openrefine
+needs to be rebuilt.
+* `cp extensions/wikidata/wikidata.properties.sample extensions/wikidata/wikidata.properties` for Java
+* `cp extensions/wikidata/module/scripts/config.js.sample extensions/wikidata/module/scripts/config.js` for Javascript
+
+
 This requires JDK 8 and Apache Maven.
 
 Documentation and Videos
@@ -48,7 +57,7 @@ Credits
 This software was created by Metaweb Technologies, Inc. and originally written
 and conceived by David Huynh <dfhuynh@google.com>. Metaweb Technologies, Inc.
 was acquired by Google, Inc. in July 2010 and the product was renamed Google Refine.
-In October 2012, it was renamed OpenRefine as it transitioned to a 
+In October 2012, it was renamed OpenRefine as it transitioned to a
 community-supported product.
 
 See `AUTHORS.md` for the list of OpenRefine contributors.
