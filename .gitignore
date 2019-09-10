@@ -44,6 +44,3 @@ target/
 *.classpath
 *.project
 *.settings
-
-# Wikidata extension configuration
-wikidata.properties
