@@ -59,15 +59,14 @@ public class WikibaseSchema implements OverlayModel {
 
     @JsonProperty("itemDocuments")
     protected List<WbItemDocumentExpr> itemDocumentExprs = new ArrayList<WbItemDocumentExpr>();
-
-    //protected String baseIri = "http://www.wikidata.org/entity/";	
-    protected String baseIri = "https://sandro-16.matrix.msu.edu/wiki/Special:EntityData/";
+    protected String baseIri;
 
     /**
      * Constructor.
      */
     public WikibaseSchema() {
-
+        WbGetConfigValues props = new WbGetConfigValues();  
+        baseIri = props.getEntityUriValue();
     }
     
     /**
@@ -82,7 +81,7 @@ public class WikibaseSchema implements OverlayModel {
      * @return the site IRI of the Wikibase instance referenced by this schema
      */
     @JsonIgnore
-    public String getBaseIri() {
+    public String getBaseIri() throws IOException {  
         return baseIri;
     }
 
@@ -167,7 +166,7 @@ public class WikibaseSchema implements OverlayModel {
         }
 
         @Override
-        public boolean visit(Project project, int rowIndex, Row row) {
+        public boolean visit(Project project, int rowIndex, Row row) {  
             ExpressionContext ctxt = new ExpressionContext(baseIri, rowIndex, row, project.columnModel, warningStore);
             result.addAll(evaluateItemDocuments(ctxt));
             return false;

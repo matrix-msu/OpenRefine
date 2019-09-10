@@ -1,0 +1,6 @@
+# defined wikidata properties
+referstoPlaceofOrigin.prop = "P31"
+subclassOf.prop = "P279"
+
+# urls
+entity.iri = "https://sandro-16.matrix.msu.edu/wiki/Special:EntityData/"
