@@ -23,7 +23,7 @@ Wikidata Extension Configuration
 Wikidata uses specific configuration files to point to different wiki installations,
 keep in mind there are two; one for Java and the other for Javascript. After editing Openrefine
 needs to be rebuilt.
-* `cp extensions/wikidata/wikidata.properties.sample extensions/wikidata/wikidata.properties` for Java
+* `cp extensions/wikidata/src/wikidata.properties.sample extensions/wikidata/src/wikidata.properties` for Java
 * `cp extensions/wikidata/module/scripts/config.js.sample extensions/wikidata/module/scripts/config.js` for Javascript
 
 

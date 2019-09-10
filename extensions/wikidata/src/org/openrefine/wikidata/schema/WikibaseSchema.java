@@ -66,7 +66,7 @@ public class WikibaseSchema implements OverlayModel {
      */
     public WikibaseSchema() {
         WbGetConfigValues props = new WbGetConfigValues();  
-        baseIri = props.getEntityUriValue();
+        this.baseIri = props.getEntityUriValue();
     }
     
     /**
@@ -74,6 +74,8 @@ public class WikibaseSchema implements OverlayModel {
      */
     @JsonCreator
     public WikibaseSchema(@JsonProperty("itemDocuments") List<WbItemDocumentExpr> exprs) {
+        WbGetConfigValues props = new WbGetConfigValues();  
+        this.baseIri = props.getEntityUriValue();
         this.itemDocumentExprs = exprs;
     }
 
