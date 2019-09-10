@@ -81,7 +81,7 @@ public class WikibaseSchema implements OverlayModel {
      * @return the site IRI of the Wikibase instance referenced by this schema
      */
     @JsonIgnore
-    public String getBaseIri() throws IOException {  
+    public String getBaseIri() {  
         return baseIri;
     }
 
