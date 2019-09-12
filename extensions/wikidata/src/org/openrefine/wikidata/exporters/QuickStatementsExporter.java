@@ -114,11 +114,14 @@ public class QuickStatementsExporter implements WriterExporter {
             Writer writer)
             throws IOException {
         for (MonolingualTextValue value : values) {
-            writer.write(qid + "\t");
+            //changing from \t to |
+            //old: writer.write(qid + "\t");
+            writer.write(qid + "|");
             writer.write(prefix);
             writer.write(value.getLanguageCode());
-            writer.write("\t\"");
+            writer.write("|\"");
             writer.write(value.getText());
+            //old: writer.write("\t\"");
             writer.write("\"\n");
         }
     }
@@ -170,7 +173,8 @@ public class QuickStatementsExporter implements WriterExporter {
             if (!add) {
                 writer.write("- ");
             }
-            writer.write(qid + "\t" + pid + "\t" + targetValue);
+            //old: writer.write(qid + "\t" + pid + "\t" + targetValue);
+            writer.write(qid + "|" + pid + "|" + targetValue);
             for (SnakGroup q : claim.getQualifiers()) {
                 translateSnakGroup(q, false, writer);
             }
@@ -201,7 +205,8 @@ public class QuickStatementsExporter implements WriterExporter {
         ValueVisitor<String> vv = new QSValuePrinter();
         String valStr = val.accept(vv);
         if (valStr != null) {
-            writer.write("\t" + pid + "\t" + valStr);
+            //old:writer.write("\t" + pid + "\t" + valStr);
+            writer.write("|" + pid + "|" + valStr);
         }
     }
 

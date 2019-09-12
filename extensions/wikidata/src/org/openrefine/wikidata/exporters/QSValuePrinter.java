@@ -26,6 +26,7 @@ package org.openrefine.wikidata.exporters;
 import java.math.BigDecimal;
 import java.util.Locale;
 
+import org.openrefine.wikidata.schema.WbGetConfigValues;
 import org.openrefine.wikidata.schema.entityvalues.ReconEntityIdValue;
 import org.openrefine.wikidata.updates.scheduler.QuickStatementsUpdateScheduler;
 import org.wikidata.wdtk.datamodel.interfaces.DatatypeIdValue;
@@ -76,7 +77,8 @@ public class QSValuePrinter implements ValueVisitor<String> {
 
     @Override
     public String visit(QuantityValue value) {
-        String unitPrefix = "http://www.wikidata.org/entity/Q";
+        WbGetConfigValues props = new WbGetConfigValues();  
+        String unitPrefix = props.getItemPrefixValue();
         String unitIri = value.getUnit();
         String unitRepresentation = "", boundsRepresentation = "";
         if (!unitIri.isEmpty()) {

@@ -14,6 +14,7 @@ public class WbGetConfigValues {
         private static String REFERS_TO_PLACE_OF_ORIGIN_PROPERTY = "P31";
         private static String SUBCLASS_OF_PROPERTY = "P2";
         private static String DEFAULT_ENTITY_URI = "https://sandro-16.matrix.msu.edu/wiki/Special:EntityData/";
+        private static String DEFAULT_ITEM_PREFIX = "https://sandro-16.matrix.msu.edu/wiki/Item:Q";
         
         public WbGetConfigValues() {
                 try {
@@ -21,6 +22,15 @@ public class WbGetConfigValues {
                 } catch (IOException e) {
                         System.out.println("Exception: " + e);
                 }
+        }
+        
+        public String getItemPrefixValue() {
+                if(extensionProperties == null) {
+                        return DEFAULT_ITEM_PREFIX;
+                }
+                
+                return extensionProperties.getProperty("itemPrefix.url", DEFAULT_ITEM_PREFIX);
+
         }
         
         public String getEntityUriValue() {
