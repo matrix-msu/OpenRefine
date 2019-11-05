@@ -28,6 +28,7 @@ test-out/
 open-refine.log
 .vscode
 .idea/
+qs_export.txt
 
 main/target/
 main/webapp/WEB-INF/lib/

@@ -1,18 +1,18 @@
 /*******************************************************************************
  * MIT License
- * 
+ *
  * Copyright (c) 2018 Antonin Delpeuch
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,6 +25,8 @@ package org.openrefine.wikidata.exporters;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.io.PrintWriter;
+import java.io.FileWriter;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
@@ -73,13 +75,18 @@ public class QuickStatementsExporter implements WriterExporter {
         if (schema == null) {
             writer.write(noSchemaErrorMessage);
         } else {
+            writer.write("The file no longer displays here. Go to the file qs_export.txt in your OpenRefine directory.");
+            //create and clear the file
+            PrintWriter txtWriter = new PrintWriter("qs_export.txt", "UTF-8");
+            txtWriter.write("");
+            txtWriter.close();
             translateSchema(project, engine, schema, writer);
         }
     }
 
     /**
      * Exports a project and a schema to a QuickStatements file
-     * 
+     *
      * @param project
      *            the project to translate
      * @param engine
@@ -114,15 +121,27 @@ public class QuickStatementsExporter implements WriterExporter {
             Writer writer)
             throws IOException {
         for (MonolingualTextValue value : values) {
-            //changing from \t to |
-            //old: writer.write(qid + "\t");
-            writer.write(qid + "|");
-            writer.write(prefix);
-            writer.write(value.getLanguageCode());
-            writer.write("|\"");
-            writer.write(value.getText());
-            //old: writer.write("\t\"");
-            writer.write("\"\n");
+
+
+            // writer.write(qid + "|");
+            // writer.write(prefix);
+            // writer.write(value.getLanguageCode());
+            // writer.write("|\"");
+            // writer.write(value.getText());
+            // writer.write("\"\n");
+
+
+
+            FileWriter fileWriter = new FileWriter("qs_export.txt", true); //Set true for append mode
+            PrintWriter txtWriter = new PrintWriter(fileWriter);
+            txtWriter.write(qid + "|");
+            txtWriter.write(prefix);
+            txtWriter.write(value.getLanguageCode());
+            txtWriter.write("|\"");
+            txtWriter.write(value.getText());
+            txtWriter.write("\"\n");
+            txtWriter.close();
+
         }
     }
 
@@ -133,15 +152,19 @@ public class QuickStatementsExporter implements WriterExporter {
         if (item.isNew()) {
             //writer.write("CREATE\n");
 			String newId = "";
-            for (Statement s : item.getAddedStatements()) {		
-                pid = s.getClaim().getMainSnak().getPropertyId().getId();		
-                if( pid.equals("quickstatementIdentifier") ) {		
-                    newId = "-"+s.getClaim().getValue();		
-                }		
-            }		
+            for (Statement s : item.getAddedStatements()) {
+                pid = s.getClaim().getMainSnak().getPropertyId().getId();
+                if( pid.equals("quickstatementIdentifier") ) {
+                    newId = "-"+s.getClaim().getValue();
+                }
+            }
             int num = ++QuickStatementsExporter.numCreated;
-            writer.write("CREATE"+newId+"\n");
-			
+            // writer.write("CREATE "+newId+"\n");
+
+            FileWriter fileWriter = new FileWriter("qs_export.txt", true); //Set true for append mode
+            PrintWriter txtWriter = new PrintWriter(fileWriter);
+            txtWriter.write("CREATE "+newId+"\n");
+            txtWriter.close();
             qid = "LAST";
             item = item.normalizeLabelsAndAliases();
         }
@@ -151,8 +174,8 @@ public class QuickStatementsExporter implements WriterExporter {
         translateNameDescr(qid, item.getAliases(), "A", item.getItemId(), writer);
 
         for (Statement s : item.getAddedStatements()) {
-			pid = s.getClaim().getMainSnak().getPropertyId().getId();		
-            if( pid.equals("quickstatementIdentifier") ){		
+			pid = s.getClaim().getMainSnak().getPropertyId().getId();
+            if( pid.equals("quickstatementIdentifier") ){
                 continue;
 			}
             translateStatement(qid, s, s.getClaim().getMainSnak().getPropertyId().getId(), true, writer);
@@ -170,11 +193,14 @@ public class QuickStatementsExporter implements WriterExporter {
         ValueVisitor<String> vv = new QSValuePrinter();
         String targetValue = val.accept(vv);
         if (targetValue != null) {
+            FileWriter fileWriter = new FileWriter("qs_export.txt", true); //Set true for append mode
+            PrintWriter txtWriter = new PrintWriter(fileWriter);
             if (!add) {
-                writer.write("- ");
+                txtWriter.write("- ");
+                //writer.write("- ");
             }
-            //old: writer.write(qid + "\t" + pid + "\t" + targetValue);
-            writer.write(qid + "|" + pid + "|" + targetValue);
+            //writer.write(qid + "|" + pid + "|" + targetValue);
+            txtWriter.write(qid + "|" + pid + "|" + targetValue);
             for (SnakGroup q : claim.getQualifiers()) {
                 translateSnakGroup(q, false, writer);
             }
@@ -184,7 +210,9 @@ public class QuickStatementsExporter implements WriterExporter {
                 }
                 break; // QS only supports one reference
             }
-            writer.write("\n");
+            //writer.write("\n");
+            txtWriter.write("\n");
+            txtWriter.close();
         }
     }
 
@@ -205,8 +233,11 @@ public class QuickStatementsExporter implements WriterExporter {
         ValueVisitor<String> vv = new QSValuePrinter();
         String valStr = val.accept(vv);
         if (valStr != null) {
-            //old:writer.write("\t" + pid + "\t" + valStr);
-            writer.write("|" + pid + "|" + valStr);
+            FileWriter fileWriter = new FileWriter("qs_export.txt", true); //Set true for append mode
+            PrintWriter txtWriter = new PrintWriter(fileWriter);
+            txtWriter.write("|" + pid + "|" + valStr);
+            //writer.write("|" + pid + "|" + valStr);
+            txtWriter.close();
         }
     }
 
