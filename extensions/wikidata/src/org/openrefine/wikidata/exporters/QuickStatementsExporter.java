@@ -201,6 +201,8 @@ public class QuickStatementsExporter implements WriterExporter {
             }
             //writer.write(qid + "|" + pid + "|" + targetValue);
             txtWriter.write(qid + "|" + pid + "|" + targetValue);
+
+            txtWriter.close();
             for (SnakGroup q : claim.getQualifiers()) {
                 translateSnakGroup(q, false, writer);
             }
@@ -211,8 +213,10 @@ public class QuickStatementsExporter implements WriterExporter {
                 break; // QS only supports one reference
             }
             //writer.write("\n");
-            txtWriter.write("\n");
-            txtWriter.close();
+            FileWriter fileWriter2 = new FileWriter("qs_export.txt", true); //Set true for append mode
+            PrintWriter txtWriter2 = new PrintWriter(fileWriter);
+            txtWriter2.write("\n");
+            txtWriter2.close();
         }
     }
 
