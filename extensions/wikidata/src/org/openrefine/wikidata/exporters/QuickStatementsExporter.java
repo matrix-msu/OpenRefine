@@ -214,7 +214,7 @@ public class QuickStatementsExporter implements WriterExporter {
             }
             //writer.write("\n");
             FileWriter fileWriter2 = new FileWriter("qs_export.txt", true); //Set true for append mode
-            PrintWriter txtWriter2 = new PrintWriter(fileWriter);
+            PrintWriter txtWriter2 = new PrintWriter(fileWriter2);
             txtWriter2.write("\n");
             txtWriter2.close();
         }
