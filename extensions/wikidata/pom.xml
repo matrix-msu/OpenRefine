@@ -13,6 +13,13 @@
     <artifactId>extensions</artifactId>
     <version>3.2</version>
   </parent>
+	<repositories>
+	  <repository>
+	    <id>project-local-repo</id>
+	    <url>file://${basedir}/module/MOD-INF/lib/</url>
+	  </repository>
+	</repositories>
+
 
   <build>
     <finalName>openrefine-wikidata</finalName>
@@ -109,6 +116,27 @@
   </build>
 
   <dependencies>
+		<dependency>
+			<groupId>org.wikidata.wdtk</groupId>
+			<artifactId>wdtk-wikibaseapi</artifactId>
+			<version>0.10.0</version>
+		<scope>system</scope>
+		<systemPath>${project.basedir}/module/MOD-INF/lib/wdtk-wikibaseapi-0.10.0.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>org.wikidata.wdtk</groupId>
+			<artifactId>wdtk-datamodel</artifactId>
+			<version>0.10.0</version>
+		<scope>system</scope>
+		<systemPath>${project.basedir}/module/MOD-INF/lib/wdtk-datamodel-0.10.0.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>org.wikidata.wdtk</groupId>
+			<artifactId>wdtk-util</artifactId>
+			<version>0.10.0</version>
+		<scope>system</scope>
+		<systemPath>${project.basedir}/module/MOD-INF/lib/wdtk-util-0.10.0.jar</systemPath>
+		</dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>main</artifactId>
@@ -120,16 +148,6 @@
       <artifactId>servlet-api</artifactId>
       <version>2.5</version>
       <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.wikidata.wdtk</groupId>
-      <artifactId>wdtk-wikibaseapi</artifactId>
-      <version>0.10.0</version>
-    </dependency>
-    <dependency>
-      <groupId>org.wikidata.wdtk</groupId>
-      <artifactId>wdtk-datamodel</artifactId>
-      <version>0.10.0</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
@@ -171,4 +189,3 @@
   </dependencies>
 
 </project>
-

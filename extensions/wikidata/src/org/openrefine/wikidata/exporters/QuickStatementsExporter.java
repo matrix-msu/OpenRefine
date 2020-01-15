@@ -1,18 +1,18 @@
 /*******************************************************************************
  * MIT License
- * 
+ *
  * Copyright (c) 2018 Antonin Delpeuch
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,6 +25,8 @@ package org.openrefine.wikidata.exporters;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.io.PrintWriter;
+import java.io.FileWriter;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
@@ -71,13 +73,26 @@ public class QuickStatementsExporter implements WriterExporter {
         if (schema == null) {
             writer.write(noSchemaErrorMessage);
         } else {
-            translateSchema(project, engine, schema, writer);
+            writer.write("The file no longer displays here. Go to the file qs_export.txt in your OpenRefine directory.");
+            // writer.write("Loading...");
+
+            //create and/or clear the file
+            PrintWriter txtWriter = new PrintWriter("qs_export.txt", "UTF-8");
+            txtWriter.write("");
+            txtWriter.close();
+
+            FileWriter fileWriter2 = new FileWriter("qs_export.txt", true); //Set true for append mode
+            PrintWriter txtWriter2 = new PrintWriter(fileWriter2);
+
+            translateSchema(project, engine, schema, txtWriter2);
+
+            txtWriter2.close();
         }
     }
 
     /**
      * Exports a project and a schema to a QuickStatements file
-     * 
+     *
      * @param project
      *            the project to translate
      * @param engine
@@ -112,10 +127,10 @@ public class QuickStatementsExporter implements WriterExporter {
             Writer writer)
             throws IOException {
         for (MonolingualTextValue value : values) {
-            writer.write(qid + "\t");
+            writer.write(qid + "|");
             writer.write(prefix);
             writer.write(value.getLanguageCode());
-            writer.write("\t\"");
+            writer.write("|\"");
             writer.write(value.getText());
             writer.write("\"\n");
         }
@@ -155,7 +170,7 @@ public class QuickStatementsExporter implements WriterExporter {
             if (!add) {
                 writer.write("- ");
             }
-            writer.write(qid + "\t" + pid + "\t" + targetValue);
+            writer.write(qid + "|" + pid + "|" + targetValue);
             for (SnakGroup q : claim.getQualifiers()) {
                 translateSnakGroup(q, false, writer);
             }
@@ -186,7 +201,7 @@ public class QuickStatementsExporter implements WriterExporter {
         ValueVisitor<String> vv = new QSValuePrinter();
         String valStr = val.accept(vv);
         if (valStr != null) {
-            writer.write("\t" + pid + "\t" + valStr);
+            writer.write("|" + pid + "|" + valStr);
         }
     }
 

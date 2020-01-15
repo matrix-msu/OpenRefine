@@ -23,8 +23,8 @@ LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
 A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
 OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
 SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,           
-DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY           
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
 THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
@@ -75,7 +75,7 @@ ReconciliationManager.registerStandardService = function(url, f) {
     data.url = url;
     data.ui = { "handler" : "ReconStandardServicePanel" };
 
-    index = ReconciliationManager.customServices.length + 
+    index = ReconciliationManager.customServices.length +
     ReconciliationManager.standardServices.length;
 
     ReconciliationManager.standardServices.push(data);
@@ -90,7 +90,7 @@ ReconciliationManager.registerStandardService = function(url, f) {
     }
   })
   .error(function(jqXHR, textStatus, errorThrown) {
-    dismissBusy(); 
+    dismissBusy();
     alert($.i18n('core-recon/error-contact')+': ' + textStatus + ' : ' + errorThrown + ' - ' + url);
   });
 };
@@ -116,8 +116,8 @@ ReconciliationManager.save = function(f) {
   $.ajax({
     async: false,
     type: "POST",
-    url: "command/core/set-preference?" + $.param({ 
-      name: "reconciliation.standardServices" 
+    url: "command/core/set-preference?" + $.param({
+      name: "reconciliation.standardServices"
     }),
     data: { "value" : JSON.stringify(ReconciliationManager.standardServices) },
     success: function(data) {
@@ -137,12 +137,12 @@ ReconciliationManager.getOrRegisterServiceFromUrl = function(url, f) {
       });
    } else {
       f(service);
-   }  
+   }
 };
 
 ReconciliationManager.ensureDefaultServicePresent = function() {
    var lang = $.i18n('core-recon/wd-recon-lang');
-   var url = "https://tools.wmflabs.org/openrefine-wikidata/"+lang+"/api";
+   var url = "https://wikirefine.enslaved.org/"+lang+"/api";
    ReconciliationManager.getOrRegisterServiceFromUrl(url, function(service) { });
    return url;
 };
@@ -151,8 +151,8 @@ ReconciliationManager.ensureDefaultServicePresent = function() {
 
   $.ajax({
     async: false,
-    url: "command/core/get-preference?" + $.param({ 
-      name: "reconciliation.standardServices" 
+    url: "command/core/get-preference?" + $.param({
+      name: "reconciliation.standardServices"
     }),
     success: function(data) {
       if (data.value && data.value != "null" && data.value != "[]") {
