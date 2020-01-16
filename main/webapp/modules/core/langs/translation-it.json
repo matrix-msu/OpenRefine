@@ -366,6 +366,7 @@
     "core-recon/access": "Accedi",
     "core-recon/cell-contains": "Ogni cella contiene:",
     "core-recon/auto-match": "Matcha automaticamente i candidati con alta confidenza",
+    "core-recon/fuzzy-match": "",
     "core-recon/column": "Colonna",
     "core-recon/service-title": "Servizi",
     "core-recon/against-type": "Riconcilia sul tipo",

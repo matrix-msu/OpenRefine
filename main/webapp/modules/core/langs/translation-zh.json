@@ -323,6 +323,7 @@
     "core-recon/against-type": "使用后面的类型",
     "core-recon/no-type": "不指定，任意匹配",
     "core-recon/auto-match": "自动匹配高质量的候选类型",
+    "core-recon/fuzzy-match": "",
     "core-recon/warning-type-sugg": "抱歉，未能为你的数据找到相应的类型，请指定Sorry, we can't suggest any type for your data. Please specify a type yourself below.",
     "core-recon/column": "列",
     "core-recon/include": "包含在内",

@@ -59,6 +59,7 @@ public class DataExtensionReconConfig extends StandardReconConfig {
             type != null ? type.id : null, 
             type != null ? type.name : null,
             true,
+            true,
             new ArrayList<ColumnDetail>());
         this.type = type;
     }

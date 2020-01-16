@@ -59,7 +59,7 @@ public class NewItemLibraryTest extends RefineTest {
     public void testUpdateReconciledCells() {
         Project project = createCSVProject(TestingData.inceptionWithNewCsv);
         StandardReconConfig config = new StandardReconConfig("http://my.endpoint",
-        		"http://my.schema", "http://my.schema", "Q5", "human", true, Collections.emptyList());
+        		"http://my.schema", "http://my.schema", "Q5", "human", true, true, Collections.emptyList());
         project.columnModel.columns.get(0).setReconConfig(config);
         
         project.rows.get(0).cells.set(0, TestingData.makeNewItemCell(3289L, "University of Ljubljana"));

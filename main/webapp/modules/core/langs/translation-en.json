@@ -380,6 +380,7 @@
     "core-recon/against-type": "Reconcile against type",
     "core-recon/no-type": "Reconcile against no particular type",
     "core-recon/auto-match": "Auto-match candidates with high confidence",
+    "core-recon/fuzzy-match": "Use fuzzy match to get more results",
     "core-recon/warning-type-sugg": "Sorry, we can't suggest any type for your data. Please specify a type yourself below.",
     "core-recon/column": "Column",
     "core-recon/include": "Include",

@@ -355,6 +355,7 @@
     "core-recon/cell-type": "Reconcilie cada célula com uma entidade de um desses tipos",
     "core-recon/cell-contains": "Cada célula contém:",
     "core-recon/auto-match": "Combinar automaticamente candidatos com alta confiança",
+    "core-recon/fuzzy-match": "",
     "core-recon/column": "Coluna",
     "core-recon/service-title": "Serviços",
     "core-recon/against-type": "Reconciliar a partir do tipo",

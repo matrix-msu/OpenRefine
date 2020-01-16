@@ -371,6 +371,7 @@
     "core-recon/access": "アクセス",
     "core-recon/cell-contains": "各セルに含まれる:",
     "core-recon/auto-match": "信頼性の高い候補を自動でマッチさせる",
+    "core-recon/fuzzy-match": "",
     "core-recon/column": "カラム名",
     "core-recon/service-title": "サービス名",
     "core-recon/against-type": "この型だけを照合:",

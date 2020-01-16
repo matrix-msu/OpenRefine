@@ -410,6 +410,7 @@
     "core-recon/access": "Zugang",
     "core-recon/cell-contains": "Jede Zelle enthält:",
     "core-recon/auto-match": "Kandidaten, die mit hoher Wahrscheinlichkeit übereinstimmen",
+    "core-recon/fuzzy-match": "",
     "core-recon/column": "Spalte",
     "core-recon/service-title": "Dienste",
     "core-recon/against-type": "Gegen Typ abgleichen",

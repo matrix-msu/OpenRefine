@@ -352,6 +352,7 @@
     "core-recon/cell-contains": "Ang bawat cell ay naglalaman ng:",
     "core-recon/wd-recon-lang": "in",
     "core-recon/auto-match": "Ang mga kandidato ng auto-match na may mataas na kumpiyansa",
+    "core-recon/fuzzy-match": "",
     "core-recon/column": "Haligi",
     "core-recon/service-title": "Mga Serbisyo",
     "core-recon/against-type": "Magkasundo laban sa uri",
