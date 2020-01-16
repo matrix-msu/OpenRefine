@@ -74,6 +74,7 @@ public class ReconJudgeOneCellCommandTest extends RefineTest {
                 "type3894", 
                 "octopus",
                 true,
+                true,
                 Collections.emptyList(),
                 5);
         reconciled.setReconConfig(config);

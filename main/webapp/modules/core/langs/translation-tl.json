@@ -352,6 +352,7 @@
     "core-recon/cell-contains": "Ang bawat cell ay mayroong:",
     "core-recon/wd-recon-lang": "ang en",
     "core-recon/auto-match": "I auto-match ang mga kandidato na may mataas na kompiyansa",
+    "core-recon/fuzzy-match": "",
     "core-recon/column": "Ang kolum",
     "core-recon/service-title": "Mga serbisyo",
     "core-recon/against-type": "I-rekonsila laban sa tipo",

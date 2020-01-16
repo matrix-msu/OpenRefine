@@ -323,6 +323,7 @@
     "core-recon/against-type": "ליישב התנגשות כנגד סוג הטור ",
     "core-recon/no-type": "ליישב התנגשויות שלא אל מול סוג מסויים כלשהו",
     "core-recon/auto-match": "התאמה אוטומטית של מועמדים בעלי סבירות גבוהה",
+    "core-recon/fuzzy-match": "",
     "core-recon/warning-type-sugg": "מצטערים, לא ניתן להציע סוג כלשהו לנתונים שלך. אנא פרטו למטה סוג משלכם.",
     "core-recon/column": "טור",
     "core-recon/include": "כולל",

@@ -371,6 +371,7 @@
     "core-recon/cell-contains": "Cada celda contiene:",
     "core-recon/wd-recon-lang": "es",
     "core-recon/auto-match": "Cotejar automáticamente candidatos con alta confianza",
+    "core-recon/fuzzy-match": "",
     "core-recon/column": "columna",
     "core-recon/service-title": "Servicios",
     "core-recon/against-type": "Cotejar contra la clase",

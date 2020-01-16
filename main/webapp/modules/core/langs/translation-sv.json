@@ -368,6 +368,7 @@
     "core-recon/against-type": "Stäm av mot typ",
     "core-recon/no-type": "Stäm av mot ingen speciell typ",
     "core-recon/auto-match": "Auto-matcha kandidater med hög konfidensgrad",
+    "core-recon/fuzzy-match": "",
     "core-recon/warning-type-sugg": "Tyvärr, vi kan inte föreslå någon typ för ditt data. Ange själv en typ nedan.",
     "core-recon/column": "Kolumn",
     "core-recon/include": "Inkludera",

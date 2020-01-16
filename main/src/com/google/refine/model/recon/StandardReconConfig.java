@@ -149,6 +149,8 @@ public class StandardReconConfig extends ReconConfig {
     final public String     typeName;
     @JsonProperty("autoMatch")
     final public boolean    autoMatch;
+    @JsonProperty("fuzzyMatch")
+    final public boolean    fuzzyMatch;
     @JsonProperty("columnDetails")
     final public List<ColumnDetail> columnDetails;
     @JsonProperty("limit")
@@ -166,6 +168,8 @@ public class StandardReconConfig extends ReconConfig {
             ReconType type,
             @JsonProperty("autoMatch")
             boolean autoMatch,
+            @JsonProperty("fuzzyMatch")
+            boolean fuzzyMatch,
             @JsonProperty("columnDetails")
             List<ColumnDetail> columnDetails,
             @JsonProperty("limit")
@@ -173,7 +177,7 @@ public class StandardReconConfig extends ReconConfig {
         this(service, identifierSpace, schemaSpace,
         		type != null ? type.id : null,
         		type != null ? type.name : null,
-        		autoMatch, columnDetails, limit);
+        		autoMatch, fuzzyMatch, columnDetails, limit);
     }
             
     public StandardReconConfig(
@@ -184,9 +188,10 @@ public class StandardReconConfig extends ReconConfig {
             String typeID, 
             String typeName,
             boolean autoMatch,
+            boolean fuzzyMatch,
             List<ColumnDetail> columnDetails
         ) {
-        this(service, identifierSpace, schemaSpace, typeID, typeName, autoMatch, columnDetails, 0);
+        this(service, identifierSpace, schemaSpace, typeID, typeName, autoMatch, fuzzyMatch, columnDetails, 0);
     }
     
     
@@ -207,6 +212,7 @@ public class StandardReconConfig extends ReconConfig {
         String typeID, 
         String typeName,
         boolean autoMatch,
+        boolean fuzzyMatch,
         List<ColumnDetail> columnDetails,
         int limit
     ) {
@@ -217,6 +223,7 @@ public class StandardReconConfig extends ReconConfig {
         this.typeID = typeID;
         this.typeName = typeName;
         this.autoMatch = autoMatch;
+        this.fuzzyMatch = fuzzyMatch;
         this.columnDetails = columnDetails;
         this.limit = limit;
     }
@@ -311,16 +318,23 @@ public class StandardReconConfig extends ReconConfig {
         @JsonProperty("limit")
         @JsonInclude(Include.NON_DEFAULT)
         protected int limit;
+
+        // Enslaved specific for option for specifying search type during reconciliation
+        @JsonProperty("fuzzy_match")
+        @JsonInclude(Include.NON_NULL)
+        protected Boolean fuzzyMatch;
         
         public ReconQuery(
                 String query,
                 String typeID,
                 List<QueryProperty> properties,
-                int limit) {
+                int limit,
+                boolean fuzzyMatch) {
             this.query = query;
             this.typeID = typeID;
             this.properties = properties;
             this.limit = limit;
+            this.fuzzyMatch = fuzzyMatch;
         }
         
     	@Override
@@ -412,7 +426,7 @@ public class StandardReconConfig extends ReconConfig {
 
             }
         
-        ReconQuery query = new ReconQuery(cell.value.toString(), typeID, properties, limit);
+        ReconQuery query = new ReconQuery(cell.value.toString(), typeID, properties, limit, fuzzyMatch);
         
         job.text = cell.value.toString();
         try {

@@ -779,6 +779,7 @@ public class WikitextImporter extends TabularImportingParserBase {
             "", 
             "entity",
             true,
+            true,
             new ArrayList<ColumnDetail>(),
             1
         );

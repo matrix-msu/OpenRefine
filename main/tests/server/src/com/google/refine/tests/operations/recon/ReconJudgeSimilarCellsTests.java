@@ -103,7 +103,7 @@ public class ReconJudgeSimilarCellsTests extends RefineTest {
                 "http://my.database/schema/",
                 null,
                 null,
-                true, Collections.emptyList());
+                true, true, Collections.emptyList());
         column.setReconConfig(config);
 
         AbstractOperation op = new ReconJudgeSimilarCellsOperation(

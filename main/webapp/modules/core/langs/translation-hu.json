@@ -589,6 +589,7 @@
     "core-recon/access": "Hozzáférés",
     "core-recon/cell-contains": "A cellák tartalma:",
     "core-recon/auto-match": "Magas egyezési fokú jelöltek automatikus illesztése",
+    "core-recon/fuzzy-match": "",
     "core-recon/column": "Oszlop",
     "core-recon/service-title": "Szolgáltatások",
     "core-recon/against-type": "Összeegyeztetés az alábbi típussal",

@@ -351,6 +351,7 @@
     "core-recon/access": "Pagsulod",
     "core-recon/cell-contains": "Kada cell naglangkob:",
     "core-recon/auto-match": "Iauto-match ang mga kandidata nga naay taas nga pagsalig",
+    "core-recon/fuzzy-match": "",
     "core-recon/column": "Kolum",
     "core-recon/service-title": "Mga serbisyo",
     "core-recon/against-type": "Iuli batok sa tayp",

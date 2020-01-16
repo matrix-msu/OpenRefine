@@ -74,7 +74,7 @@ public class StandardReconConfigTests extends RefineTest {
 
     private class StandardReconConfigStub extends StandardReconConfig {
         public StandardReconConfigStub() {
-            super("", "", "", "", "", false, new ArrayList<ColumnDetail>());
+            super("", "", "", "", "", false, false, new ArrayList<ColumnDetail>());
         }
 
         public double wordDistanceTest(String s1, String s2) {
@@ -114,7 +114,8 @@ public class StandardReconConfigTests extends RefineTest {
                 "                \"id\": \"Q13442814\",\n" + 
                 "                \"name\": \"scientific article\"\n" + 
                 "        },\n" + 
-                "        \"autoMatch\": true,\n" + 
+				"        \"autoMatch\": true,\n" + 
+				"        \"fuzzyMatch\": true,\n" + 
                 "        \"columnDetails\": [\n" + 
                 "           {\n" + 
                 "             \"column\": \"organization_country\",\n" + 
@@ -144,7 +145,8 @@ public class StandardReconConfigTests extends RefineTest {
     			+ "\"identifierSpace\":\"http://www.wikidata.org/entity/\","
     			+ "\"schemaSpace\":\"http://www.wikidata.org/prop/direct/\","
     			+ "\"type\":null,"
-    			+ "\"autoMatch\":true,"
+				+ "\"autoMatch\":true,"
+				+ "\"fuzzyMatch\":true,"
     			+ "\"columnDetails\":["
     			+ "    {\"column\":\"_ - id\","
     			+ "     \"property\":{\"id\":\"P3153\",\"name\":\"Crossref funder ID\"}}"
@@ -160,7 +162,8 @@ public class StandardReconConfigTests extends RefineTest {
     	String json = "{\"mode\":\"standard-service\","
     			+ "\"service\":\"https://tools.wmflabs.org/openrefine-wikidata/en/api\","
     			+ "\"type\":null,"
-    			+ "\"autoMatch\":true,"
+				+ "\"autoMatch\":true,"
+				+ "\"fuzzyMatch\":true,"
     			+ "\"columnDetails\":[],"
     			+ "\"limit\":0}";
     	StandardReconConfig config = StandardReconConfig.reconstruct(json);
@@ -182,7 +185,8 @@ public class StandardReconConfigTests extends RefineTest {
                 "                \"id\": \"Q1234\",\n" + 
                 "                \"name\": \"movie\"\n" + 
                 "        },\n" + 
-                "        \"autoMatch\": true,\n" + 
+				"        \"autoMatch\": true,\n" + 
+				"        \"fuzzyMatch\": true,\n" + 
                 "        \"columnDetails\": [\n" + 
                 "           {\n" + 
                 "             \"column\": \"director\",\n" + 

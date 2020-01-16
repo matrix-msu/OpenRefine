@@ -389,6 +389,7 @@
     "core-recon/access": "Доступ к",
     "core-recon/cell-contains": "Каждая ячейка содержит:",
     "core-recon/auto-match": "Производить автоматическое соответствие для кандидатов с высокой степенью доверия",
+    "core-recon/fuzzy-match": "",
     "core-recon/column": "Колонка",
     "core-recon/service-title": "Службы",
     "core-recon/against-type": "Провести сверку в соответствии с типом",
