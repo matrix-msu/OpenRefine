@@ -128,7 +128,7 @@ SchemaAlignmentDialog.setUpTabs = function() {
         .addClass('disabled')
         .click(function() { SchemaAlignmentDialog._discardChanges(); });
 
-  this._wikibasePrefix = "http://www.wikidata.org/entity/"; // hardcoded for now
+  this._wikibasePrefix = "https://lod.enslaved.org/entity/"; // hardcoded for now
 
   // Init the column area
   this.updateColumns();
@@ -166,8 +166,15 @@ SchemaAlignmentDialog.updateColumns = function() {
   for (var i = 0; i < columns.length; i++) {
      var column = columns[i];
      var reconConfig = column.reconConfig;
-     var cell = SchemaAlignmentDialog._createDraggableColumn(column.name,
-        reconConfig && reconConfig.identifierSpace === this._wikibasePrefix && column.reconStats);
+     var addColumn = false;
+     if(
+       (reconConfig && reconConfig.identifierSpace === this._wikibasePrefix && column.reconStats) ||
+       (this._wikibasePrefix && column.reconStats && column.reconStats.newTopics > 0)
+     ){
+       addColumn = true;
+     }
+
+     var cell = SchemaAlignmentDialog._createDraggableColumn(column.name, addColumn);
      this._columnArea.append(cell);
   }
 
