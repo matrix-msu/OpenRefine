@@ -168,7 +168,13 @@ SchemaAlignmentDialog.updateColumns = function() {
      var reconConfig = column.reconConfig;
      var addColumn = false;
      if(
-       (reconConfig && reconConfig.identifierSpace === this._wikibasePrefix && column.reconStats) ||
+       (
+           reconConfig &&
+           (
+               reconConfig.identifierSpace === this._wikibasePrefix ||
+               reconConfig.identifierSpace === "http://www.wikidata.org/entity/"
+           ) && column.reconStats
+       ) ||
        (this._wikibasePrefix && column.reconStats && column.reconStats.newTopics > 0)
      ){
        addColumn = true;
